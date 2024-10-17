@@ -3,13 +3,14 @@
 <body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-4 form">
-                <div class="text-center border-bottom py-2">
-                    <img src="./public/assets/SoulMate (3).png" alt="logo" height="100">
+            <div class="col-md-4 my-0 p-0 shadow" style="min-height: 100vh">
+                <div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 275px)">
+                    <img src="./public/assets/SoulMate (3).png" alt="logo" style="width: 75%">
                 </div>
-                <form action="forgot-password.php" method="POST" autocomplete="">
-                    <h2 class="text-center">Forgot Password</h2>
-                    <p class="text-center">Enter your email address</p>
+            
+                <form class="p-4 bg-white" action="forgot-password.php" method="POST" autocomplete="">
+                    <h2 class="mb-2 font-weight-bold" style="font-size: 24px;">Forgot Password</h2>
+                    <p class="m-0" style="font-size: 12px;">Forgot your password? Fill the email below and let us send you an email to reset your pasword.</p>
                     <?php
                         if(count($errors) > 0){
                             ?>
@@ -23,16 +24,13 @@
                             <?php
                         }
                     ?>
-                    <div class="form-group mt-5">
-                        <label for="email" class="form-label">Email</label>
+                    <div class="form-group mt-4">
                         <input class="form-control" type="email" name="email" placeholder="Enter email address" required value="<?php echo $email ?>">
                     </div>
                     <div class="form-group">
-                        <input class="form-control button" type="submit" name="check-email" value="Continue">
+                        <input class="btn btn-primary btn-block py-2 rounded" type="submit" name="check-email" value="Continue">
                     </div>
-                    <div class="form-group">
-                        <a class="form-control button text-center" href="login-user.php" >Login</a>
-                    </div>
+                    <div class="link login-link text-center" style="font-size: 12px">Already have an account? <a href="login-user.php" class="font-weight-bold">Sign In!</a></div>
                 </form>
             </div>
         </div>
