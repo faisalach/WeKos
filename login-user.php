@@ -30,7 +30,7 @@ if($email != false && $password != false){
 <body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-4 login-form my-0 p-0 shadow" style="min-height: 100vh">
+            <div class="col-md-4 my-0 p-0 shadow" style="min-height: 100vh">
                 <div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 311px)">
                     <img src="./public/assets/SoulMate (3).png" alt="logo" style="width: 75%">
                 </div>
