@@ -1,9 +1,11 @@
 <?php 
+
 header("Access-Control-Allow-Origin: *");
 session_start();
 require "connection.php";
 $email = "";
 $errors = array();
+
 if (strpos($_SERVER["DOCUMENT_ROOT"], "xampp") !== false) {
 	$root_folder 	= $_SERVER["DOCUMENT_ROOT"]."/Wekos/";
 }else{
@@ -43,8 +45,8 @@ if(isset($_POST['signup'])){
 		if($data_check){
 			$subject = "Email Verification Code";
 			$message = "Your verification code is $code";
-			$sender = "From: Wekos";
-			if(mail($email, $subject, $message, $sender)){
+			include 'php/mailer.php';
+			if(sendMail($email, $subject, $message)){
 				$info = "We've sent a verification code to your email - $email";
 				$_SESSION['info'] = $info;
 				$_SESSION['email'] = $email;
@@ -52,7 +54,6 @@ if(isset($_POST['signup'])){
 				$_SESSION['unique_id'] = $ran_id;
 				echo "<script>location.href = 'user-otp.php';</script>";
 				exit;
-				exit();
 			}else{
 				$errors['otp-error'] = "Failed while sending code!";
 			}
@@ -92,7 +93,6 @@ if(isset($_POST['check'])){
 				echo "<script>location.href = 'profile-input.php';</script>";
 				exit;
 			}
-			exit();
 		}else{
 			$errors['otp-error'] = "Failed while updating code!";
 		}
@@ -168,14 +168,13 @@ if(isset($_POST['check-email'])){
 		if($run_query){
 			$subject = "Password Reset Code";
 			$message = "Your password reset code is $code";
-			$sender = "From: Wekos";
-			if(mail($email, $subject, $message, $sender)){
-				$info = "We've sent a passwrod reset otp to your email - $email";
+			include 'php/mailer.php';
+			if(sendMail($email, $subject, $message)){
+				$info = "We've sent a password reset otp to your email - $email";
 				$_SESSION['info'] = $info;
 				$_SESSION['email'] = $email;
 				echo "<script>location.href = 'reset-code.php';</script>";
 				exit;
-				exit();
 			}else{
 				$errors['otp-error'] = "Failed while sending code!";
 			}
@@ -201,7 +200,6 @@ if(isset($_POST['check-reset-otp'])){
 		$_SESSION['info'] = $info;
 		echo "<script>location.href = 'new-password.php';</script>";
 		exit;
-		exit();
 	}else{
 		$errors['otp-error'] = "You've entered incorrect code!";
 	}
