@@ -17,7 +17,7 @@ if($email != false && $password != false){
 				exit;
 			}
 			if($profile_created == "yes") {
-				echo "<script>location.href = 'home.php';</script>";
+				echo "<script>location.href = 'index.php';</script>";
 				exit;
 			}
 		}else{
@@ -29,6 +29,8 @@ if($email != false && $password != false){
 	echo "<script>location.href = 'login-user.php';</script>";
 	exit;
 }
+echo "<script>location.href = 'edit-profile.php';</script>";
+exit;
 ?>
 
 <!DOCTYPE html>

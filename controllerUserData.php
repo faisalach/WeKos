@@ -4,7 +4,7 @@ session_start();
 require "connection.php";
 $email = "";
 $errors = array();
-
+$root_folder 	= $_SERVER["DOCUMENT_ROOT"]."/Wekos/";
 
 function consoleLog($x) {
 	echo '<script type="text/javascript">' . 'console.log' . '(' . '"' . $x . '"' . ');</script>';
@@ -39,7 +39,7 @@ if(isset($_POST['signup'])){
 		if($data_check){
 			$subject = "Email Verification Code";
 			$message = "Your verification code is $code";
-			$sender = "From: SoulMate";
+			$sender = "From: Wekos";
 			if(mail($email, $subject, $message, $sender)){
 				$info = "We've sent a verification code to your email - $email";
 				$_SESSION['info'] = $info;
@@ -81,7 +81,7 @@ if(isset($_POST['check'])){
 				$fetch = mysqli_fetch_assoc($res);
 				$uname = ucfirst(explode(" ", $fetch['name'])[0]);
 				$_SESSION['msg_header'] = "Hello";
-				$_SESSION['msg'] = "Welcome to SoulMate, " . $uname . "!";
+				$_SESSION['msg'] = "Welcome to Wekos, " . $uname . "!";
 				echo "<script>location.href = 'index.php';</script>";
 				exit;
 			} else {
@@ -164,7 +164,7 @@ if(isset($_POST['check-email'])){
 		if($run_query){
 			$subject = "Password Reset Code";
 			$message = "Your password reset code is $code";
-			$sender = "From: SoulMate";
+			$sender = "From: Wekos";
 			if(mail($email, $subject, $message, $sender)){
 				$info = "We've sent a passwrod reset otp to your email - $email";
 				$_SESSION['info'] = $info;
@@ -265,7 +265,7 @@ if(isset($_POST['change-password'])){
     	if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg")
     		$errors['imageFileType'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
     	else {
-    		move_uploaded_file($_FILES["profile_photo"]["tmp_name"], $_SERVER["DOCUMENT_ROOT"]."/SoulMate/public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"]);
+    		move_uploaded_file($_FILES["profile_photo"]["tmp_name"], $root_folder."/public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"]);
     		$profile_photo = "./public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"];
     	}
     	$query = "INSERT INTO userprofile VALUES ('$uid', '$name', '$age', '$gender', '$height', '$weight', '$lat', '$long', '$profile_photo', '$bio')";
@@ -279,12 +279,12 @@ if(isset($_POST['change-password'])){
     	}
 
         //social table
-    	$_POST['ig'] == "" ? $ig = NULL : $ig = mysqli_real_escape_string($con, $_POST['ig']);
-    	$_POST['tiktok'] == "" ? $sc = NULL : $sc = mysqli_real_escape_string($con, $_POST['tiktok']);
-    	$_POST['twit'] == "" ? $twit = NULL : $twit = mysqli_real_escape_string($con, $_POST['twit']);
-    	$_POST['fb'] == "" ? $fb = NULL : $fb = mysqli_real_escape_string($con, $_POST['fb']);
-    	$query = "INSERT INTO social VALUES ('$uid', '$ig', '$sc', '$twit', '$fb')";
-    	$result = mysqli_query($con, $query);
+    	$ig 		= !empty($_POST['ig']) ? mysqli_real_escape_string($con, $_POST['ig']) : "";
+    	$sc 		= !empty($_POST['tiktok']) ? mysqli_real_escape_string($con, $_POST['tiktok']) : "";
+    	$twit 		= !empty($_POST['twit']) ? mysqli_real_escape_string($con, $_POST['twit']) : "";
+    	$fb 		= !empty($_POST['fb']) ? mysqli_real_escape_string($con, $_POST['fb']) : "";
+    	$query 		= "INSERT INTO social VALUES ('$uid', '$ig', '$sc', '$twit', '$fb')";
+    	$result 	= mysqli_query($con, $query);
     	if($result){
     		consoleLog("social inserted");
     		$count++;
@@ -293,84 +293,12 @@ if(isset($_POST['change-password'])){
     		$errors['db-error'] = "Something went wrong with social!";
     	}
 
-        //career table
-    	$status = mysqli_real_escape_string($con, $_POST['status']);
-    	$job = mysqli_real_escape_string($con, $_POST['job']);
-    	$_POST['college'] == "" ? $college = NULL : $college = mysqli_real_escape_string($con, $_POST['college']);
-    	$entre = mysqli_real_escape_string($con, $_POST['entre']);        
-    	$_POST['owns_biz'] == "" ? $owns_biz = NULL : $owns_biz = mysqli_real_escape_string($con, $_POST['owns_biz']);
-    	$query = "INSERT INTO career VALUES ('$uid', '$status', '$job', '$college', '$entre', '$owns_biz')";
-    	$result = mysqli_query($con, $query);
-    	if($result){
-    		consoleLog("career inserted");
-    		$count++;
-    	} else {
-    		consoleLog(mysqli_error($con));
-    		$errors['db-error'] = "Something went wrong with career!";
-    	}
-
-        //hobbies table
-    	isset($_POST['streaming_movies_and_shows']) ? $streaming_movies_and_shows = mysqli_real_escape_string($con, $_POST['streaming_movies_and_shows']) : $streaming_movies_and_shows = 0;
-    	isset($_POST['anime']) ? $anime = mysqli_real_escape_string($con, $_POST['anime']) : $anime = 0;
-    	isset($_POST['stand_up_comedy']) ? $stand_up_comedy = mysqli_real_escape_string($con, $_POST['stand_up_comedy']) : $stand_up_comedy = 0;
-    	isset($_POST['reading']) ? $reading = mysqli_real_escape_string($con, $_POST['reading']) : $reading = 0;
-    	isset($_POST['writing']) ? $writing = mysqli_real_escape_string($con, $_POST['writing']) : $writing = 0;
-    	isset($_POST['meditation']) ? $meditation = mysqli_real_escape_string($con, $_POST['meditation']) : $meditation = 0;
-    	isset($_POST['music']) ? $music = mysqli_real_escape_string($con, $_POST['music']) : $music = 0;
-    	isset($_POST['eating']) ? $eating = mysqli_real_escape_string($con, $_POST['eating']) : $eating = 0;
-    	isset($_POST['dancing']) ? $dancing = mysqli_real_escape_string($con, $_POST['dancing']) : $dancing = 0;
-    	isset($_POST['singing']) ? $singing = mysqli_real_escape_string($con, $_POST['singing']) : $singing = 0;
-    	isset($_POST['baking']) ? $baking = mysqli_real_escape_string($con, $_POST['baking']) : $baking = 0;
-    	isset($_POST['cooking']) ? $cooking = mysqli_real_escape_string($con, $_POST['cooking']) : $cooking = 0;
-    	isset($_POST['gardening']) ? $gardening = mysqli_real_escape_string($con, $_POST['gardening']) : $gardening = 0;
-    	isset($_POST['arts_and_crafts']) ? $arts_and_crafts = mysqli_real_escape_string($con, $_POST['arts_and_crafts']) : $arts_and_crafts = 0;
-    	isset($_POST['painting']) ? $painting = mysqli_real_escape_string($con, $_POST['painting']) : $painting = 0;
-    	isset($_POST['sketching']) ? $sketching = mysqli_real_escape_string($con, $_POST['sketching']) : $sketching = 0;
-    	isset($_POST['fishing']) ? $fishing = mysqli_real_escape_string($con, $_POST['fishing']) : $fishing = 0;
-    	isset($_POST['running']) ? $running = mysqli_real_escape_string($con, $_POST['running']) : $running = 0;
-    	isset($_POST['walking']) ? $walking = mysqli_real_escape_string($con, $_POST['walking']) : $walking = 0;
-    	isset($_POST['swimming']) ? $swimming = mysqli_real_escape_string($con, $_POST['swimming']) : $swimming = 0;
-    	isset($_POST['working_out']) ? $working_out = mysqli_real_escape_string($con, $_POST['working_out']) : $working_out = 0;
-    	isset($_POST['yoga']) ? $yoga = mysqli_real_escape_string($con, $_POST['yoga']) : $yoga = 0;
-    	isset($_POST['bicycling']) ? $bicycling = mysqli_real_escape_string($con, $_POST['bicycling']) : $bicycling = 0;
-    	isset($_POST['driving']) ? $driving = mysqli_real_escape_string($con, $_POST['driving']) : $driving = 0;
-    	isset($_POST['riding']) ? $riding = mysqli_real_escape_string($con, $_POST['riding']) : $riding = 0;
-    	isset($_POST['sports']) ? $sports = mysqli_real_escape_string($con, $_POST['sports']) : $sports = 0;
-    	isset($_POST['video_games']) ? $video_games = mysqli_real_escape_string($con, $_POST['video_games']) : $video_games = 0;
-    	isset($_POST['travelling']) ? $travelling = mysqli_real_escape_string($con, $_POST['travelling']) : $travelling = 0;
-    	isset($_POST['hiking']) ? $hiking = mysqli_real_escape_string($con, $_POST['hiking']) : $hiking = 0;
-    	isset($_POST['collecting']) ? $collecting = mysqli_real_escape_string($con, $_POST['collecting']) : $collecting = 0;
-    	isset($_POST['volunteer_work']) ? $volunteer_work = mysqli_real_escape_string($con, $_POST['volunteer_work']) : $volunteer_work = 0;
-    	isset($_POST['working']) ? $working = mysqli_real_escape_string($con, $_POST['working']) : $working = 0;
-    	isset($_POST['audiobooks_and_podcasts']) ? $audiobooks_and_podcasts = mysqli_real_escape_string($con, $_POST['audiobooks_and_podcasts']) : $audiobooks_and_podcasts = 0;
-    	isset($_POST['youtube']) ? $youtube = mysqli_real_escape_string($con, $_POST['youtube']) : $youtube = 0;
-    	isset($_POST['social_media']) ? $social_media = mysqli_real_escape_string($con, $_POST['social_media']) : $social_media = 0;
-    	isset($_POST['housework']) ? $housework = mysqli_real_escape_string($con, $_POST['housework']) : $housework = 0;
-    	isset($_POST['shopping']) ? $shopping = mysqli_real_escape_string($con, $_POST['shopping']) : $shopping = 0;
-    	isset($_POST['coding']) ? $coding = mysqli_real_escape_string($con, $_POST['coding']) : $coding = 0;
-    	isset($_POST['hacking']) ? $hacking = mysqli_real_escape_string($con, $_POST['hacking']) : $hacking = 0;
-    	isset($_POST['photoshop']) ? $photoshop = mysqli_real_escape_string($con, $_POST['photoshop']) : $photoshop = 0;
-    	isset($_POST['video_editing']) ? $video_editing = mysqli_real_escape_string($con, $_POST['video_editing']) : $video_editing = 0;
-    	isset($_POST['filmmaking']) ? $filmmaking = mysqli_real_escape_string($con, $_POST['filmmaking']) : $filmmaking = 0;
-    	isset($_POST['science']) ? $science = mysqli_real_escape_string($con, $_POST['science']) : $science = 0;
-    	isset($_POST['astronomy']) ? $astronomy = mysqli_real_escape_string($con, $_POST['astronomy']) : $astronomy = 0;
-    	isset($_POST['astrology']) ? $astrology = mysqli_real_escape_string($con, $_POST['astrology']) : $astrology = 0;
-    	$query = "INSERT INTO hobbies VALUES ('$uid', '$streaming_movies_and_shows', '$anime', '$stand_up_comedy', '$reading', '$writing', '$meditation', '$music', '$eating','$dancing','$singing','$baking','$cooking','$gardening','$arts_and_crafts','$painting','$sketching','$fishing','$running','$walking', '$swimming', '$working_out','$yoga','$bicycling','$driving','$riding','$sports','$video_games','$travelling','$hiking','$collecting','$volunteer_work','$working','$audiobooks_and_podcasts','$youtube','$social_media','$housework','$shopping','$coding','$hacking','$photoshop','$video_editing','$filmmaking','$science','$astrology','$astronomy')";
-    	$result = mysqli_query($con, $query);
-    	if($result){
-    		consoleLog("hobbies inserted");
-    		$count++;
-    	} else {
-    		consoleLog(mysqli_error($con));
-    		$errors['db-error'] = "Something went wrong with hobbies!";
-    	}
-
     	if($count == 4) {
     		$query = "UPDATE usertable SET profile_created='yes' WHERE uid=$uid";
     		$result = mysqli_query($con, $query);
     		if($result) {
     			consoleLog("Profile successfully created");
-    			$query = "INSERT INTO notification(uid, type, content) VALUES ($uid, 'default', 'Welcome to SoulMate!'), ($uid, 'default', 'Browse through recommendations to find your perfect match!')";
+    			$query = "INSERT INTO notification(uid, type, content) VALUES ($uid, 'default', 'Welcome to Wekos!'), ($uid, 'default', 'Browse through recommendations to find your perfect match!')";
     			$res = mysqli_query($con, $query);
     			if($res){
     				consoleLog("Notifs added successfully");
@@ -378,7 +306,7 @@ if(isset($_POST['change-password'])){
     				consoleLog("Notifs error");
     				consoleLog(mysqli_error($con));
     			}
-    			$_SESSION['msg_header'] = "Welcome to SoulMate";
+    			$_SESSION['msg_header'] = "Welcome to Wekos";
     			$_SESSION['msg'] = "Your profile has been created successfully";
     			echo "<script>location.href = 'index.php';</script>";
     			exit;
@@ -408,7 +336,7 @@ if(isset($_POST['change-password'])){
     	$weight 		= mysqli_real_escape_string($con, $_POST['weight']);
     	$province_id	= mysqli_real_escape_string($con, $_POST['asal_provinsi']);
     	$regencies_id	= mysqli_real_escape_string($con, $_POST['asal_kota']);
-    	$address 		= mysqli_real_escape_string($con, $_POST['address']);
+    	$address 		= mysqli_real_escape_string($con, $_POST['alamat']);
     	$bio 			= mysqli_real_escape_string($con, $_POST['bio']);
     	$fakultas_id	= mysqli_real_escape_string($con, $_POST['fakultas']);
     	$jurusan_id		= mysqli_real_escape_string($con, $_POST['jurusan']);
@@ -440,14 +368,14 @@ if(isset($_POST['change-password'])){
     		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"){
     			$errors['imageFileType'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
     		}else {
-    			move_uploaded_file($_FILES["profile_photo"]["tmp_name"], $_SERVER["DOCUMENT_ROOT"]."/SoulMate/public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"]);
+    			move_uploaded_file($_FILES["profile_photo"]["tmp_name"], $root_folder."/public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"]);
     			$profile_photo = "./public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"];
                 //get old photo url
     			$query 	= "SELECT profile_photo FROM userprofile WHERE uid='$uid'";
     			$res 	= mysqli_query($con, $query);
-    			$fetch 	= mysqli_fetch_assoc($run_query);
+    			$fetch 	= mysqli_fetch_assoc($res);
     			$old 	= $fetch['profile_photo'];
-    			$url 	= $_SERVER["DOCUMENT_ROOT"]."/SoulMate" . substr($old, 1);
+    			$url 	= $root_folder . substr($old, 1);
                 // if($old != $profile_photo) unlink(realpath($url));
 
     			$query = "UPDATE userprofile SET 
