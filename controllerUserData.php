@@ -23,7 +23,8 @@ if(isset($_POST['signup'])){
 	$res = mysqli_query($con, $email_check);
 	if(mysqli_num_rows($res) > 0){
 		$errors['email'] = "Email that you have entered already exist!";
-		header('Location: login-user.php');
+		echo "<script>location.href = 'login-user.php';</script>";
+		exit;
 	}
 	if(count($errors) === 0){
 		$encpass = password_hash($password, PASSWORD_BCRYPT);
@@ -45,7 +46,8 @@ if(isset($_POST['signup'])){
 				$_SESSION['email'] = $email;
 				$_SESSION['password'] = $password;
 				$_SESSION['unique_id'] = $ran_id;
-				header('location: user-otp.php');
+				echo "<script>location.href = 'user-otp.php';</script>";
+				exit;
 				exit();
 			}else{
 				$errors['otp-error'] = "Failed while sending code!";
@@ -80,9 +82,11 @@ if(isset($_POST['check'])){
 				$uname = ucfirst(explode(" ", $fetch['name'])[0]);
 				$_SESSION['msg_header'] = "Hello";
 				$_SESSION['msg'] = "Welcome to SoulMate, " . $uname . "!";
-				header('location: index.php');
+				echo "<script>location.href = 'index.php';</script>";
+				exit;
 			} else {
-				header('location: profile-input.php');
+				echo "<script>location.href = 'profile-input.php';</script>";
+				exit;
 			}
 			exit();
 		}else{
@@ -128,14 +132,17 @@ if(isset($_POST['login'])){
 					$_SESSION['msg'] = "Welcome back, " . $uname . "!";
 
 
-					header('location: index.php');
+					echo "<script>location.href = 'index.php';</script>";
+					exit;
 				} else {
-					header('location: profile-input.php');
+					echo "<script>location.href = 'profile-input.php';</script>";
+					exit;
 				}
 			}else{
 				$info = "It's look like you haven't still verified your email - $email";
 				$_SESSION['info'] = $info;
-				header('location: user-otp.php');
+				echo "<script>location.href = 'user-otp.php';</script>";
+				exit;
 			}
 		}else{
 			$errors['email'] = "Incorrect email or password!";
@@ -162,7 +169,8 @@ if(isset($_POST['check-email'])){
 				$info = "We've sent a passwrod reset otp to your email - $email";
 				$_SESSION['info'] = $info;
 				$_SESSION['email'] = $email;
-				header('location: reset-code.php');
+				echo "<script>location.href = 'reset-code.php';</script>";
+				exit;
 				exit();
 			}else{
 				$errors['otp-error'] = "Failed while sending code!";
@@ -187,7 +195,8 @@ if(isset($_POST['check-reset-otp'])){
 		$_SESSION['email'] = $email;
 		$info = "Please create a new password that you don't use on any other site.";
 		$_SESSION['info'] = $info;
-		header('location: new-password.php');
+		echo "<script>location.href = 'new-password.php';</script>";
+		exit;
 		exit();
 	}else{
 		$errors['otp-error'] = "You've entered incorrect code!";
@@ -210,7 +219,8 @@ if(isset($_POST['change-password'])){
             if($run_query){
             	$info = "Your password is changed. Now you can login with your new password.";
             	$_SESSION['info'] = $info;
-            	header('Location: password-changed.php');
+            	echo "<script>location.href = 'password-changed.php';</script>";
+            	exit;
             }else{
             	$errors['db-error'] = "Failed to change your password!";
             }
@@ -219,7 +229,8 @@ if(isset($_POST['change-password'])){
     
    //if login now button click
     if(isset($_POST['login-now'])){
-    	header('Location: login-user.php');
+    	echo "<script>location.href = 'login-user.php';</script>";
+    	exit;
     }
 
     //if profile form submitted
@@ -369,7 +380,8 @@ if(isset($_POST['change-password'])){
     			}
     			$_SESSION['msg_header'] = "Welcome to SoulMate";
     			$_SESSION['msg'] = "Your profile has been created successfully";
-    			header('location: index.php');
+    			echo "<script>location.href = 'index.php';</script>";
+    			exit;
     		} else {
     			consoleLog("Error creating profile");
     			consoleLog(mysqli_error($con));
@@ -487,7 +499,8 @@ if(isset($_POST['change-password'])){
     	if($err_count == 0) {
     		$_SESSION['msg_header'] = "Profile Update";
     		$_SESSION['msg'] = "Your profile has been updated successfully";
-    		header('location: edit-profile.php');
+    		echo "<script>location.href = 'edit-profile.php';</script>";
+    		exit;
     	}
     }
 
@@ -590,7 +603,8 @@ if(isset($_POST['change-password'])){
     		session_start();
     		session_unset();
     		session_destroy();
-    		header('location: signup-user.php');
+    		echo "<script>location.href = 'signup-user.php';</script>";
+    		exit;
     	}
     }
 
@@ -715,7 +729,8 @@ if(isset($_POST['change-password'])){
     	if($res) echo "Blocked user";
     	else echo "error";
 
-    	header('location: index.php');
+    	echo "<script>location.href = 'index.php';</script>";
+    	exit;
     }
 
     if(isset($_POST['show-profile'])) {

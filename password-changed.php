@@ -1,7 +1,8 @@
 <?php require_once "controllerUserData.php"; ?>
 <?php
 if($_SESSION['info'] == false){
-    header('Location: login-user.php');  
+    echo "<script>location.href = 'login-user.php';</script>";
+    exit;
 }
 ?>
 <!DOCTYPE html>

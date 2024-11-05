@@ -13,15 +13,19 @@ if($email != false && $password != false){
 		$profile_created = $fetch_info['profile_created'];
 		if($status == "verified"){
 			if($code != 0){
-				header('Location: reset-code.php');
+				echo "<script>location.href = 'reset-code.php';</script>";
+				exit;
 			}
 			if($profile_created == "yes") {
-				header('Location: index.php');
+				echo "<script>location.href = 'index.php';</script>";
+				exit;
 			}
 		}else if($status == "notverified"){
-			header('Location: user-otp.php');
+			echo "<script>location.href = 'user-otp.php';</script>";
+			exit;
 		} else {
-			header('Location: index.php');
+			echo "<script>location.href = 'index.php';</script>";
+			exit;
 		}
 	}
 }

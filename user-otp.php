@@ -2,7 +2,8 @@
 <?php 
 $email = $_SESSION['email'];
 if($email == false){
-	header('Location: login-user.php');
+	echo "<script>location.href = 'login-user.php';</script>";
+	exit;
 } 
 ?>
 <?php include_once 'header.php'; ?>

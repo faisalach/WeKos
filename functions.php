@@ -7,7 +7,7 @@ function pageForLogin(){
 	$uid = "";
 
 	if (empty($email) || empty($password)) {
-		header('Location: login-user.php');
+		echo "<script>location.href = 'login-user.php';</script>";
 		exit;
 	}
 
@@ -20,10 +20,12 @@ function pageForLogin(){
 		$code = $fetch_info['code'];
 		if($status == "verified"){
 			if($code != 0){
-				header('Location: reset-code.php');
+				echo "<script>location.href = 'reset-code.php';</script>";
+				exit;
 			}
 		}else{
-			header('Location: user-otp.php');
+			echo "<script>location.href = 'user-otp.php';</script>";
+			exit;
 		}
 	}
 

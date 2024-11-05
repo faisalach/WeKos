@@ -9,12 +9,15 @@
             if($sql){
                 session_unset();
                 session_destroy();
-                header("location: ../login-user.php");
+                echo "<script>location.href = '../login-user.php';</script>";
+                exit;
             }
         }else{
-            header("location: ../users.php");
+            echo "<script>location.href = '../users.php';</script>";
+            exit;
         }
     }else{  
-        header("location: ../login-user.php");
+        echo "<script>location.href = '../login-user.php';</script>";
+        exit;
     }
 ?>
