@@ -64,9 +64,9 @@ $matches = matches($uid);
 
 	<!-- POPOVERS -->
 	<ul id="popover-content-profile-icon" class="list-group" style="display: none;">
-		<span class="list-group-item btn btn-outline-success rounded"><a href="users.php">Message</a></span>
-		<span class="list-group-item btn btn-outline-success rounded"><a href="edit-profile.php">Edit profile</a></span>
-		<span class="list-group-item btn btn-outline-danger rounded"><a href="php/logout.php?logout_id=<?php echo $_SESSION['unique_id']; ?>" class="">Logout</a></span>
+		<a class="list-group-item btn btn-outline-success rounded" href="users.php">Message</a>
+		<a class="list-group-item btn btn-outline-success rounded" href="edit-profile.php">Edit profile</a>
+		<a class="list-group-item btn btn-outline-danger rounded" href="php/logout.php?logout_id=<?php echo $_SESSION['unique_id']; ?>" class="">Logout</a>
 	</ul>
 
 	<ul id="popover-content-matches" class="list-group" style="display: none;">
