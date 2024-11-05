@@ -4,9 +4,11 @@ session_start();
 require "connection.php";
 $email = "";
 $errors = array();
-$root_folder 	= $_SERVER["DOCUMENT_ROOT"]."/Wekos/";
-echo $root_folder;
-exit;
+if (strpos($_SERVER["DOCUMENT_ROOT"], "xampp") !== false) {
+	$root_folder 	= $_SERVER["DOCUMENT_ROOT"]."/Wekos/";
+}else{
+	$root_folder 	= $_SERVER["DOCUMENT_ROOT"]."/";
+}
 
 function consoleLog($x) {
 	echo '<script type="text/javascript">' . 'console.log' . '(' . '"' . $x . '"' . ');</script>';
