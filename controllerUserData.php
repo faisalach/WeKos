@@ -80,7 +80,7 @@ if(isset($_POST['check'])){
 				$uname = ucfirst(explode(" ", $fetch['name'])[0]);
 				$_SESSION['msg_header'] = "Hello";
 				$_SESSION['msg'] = "Welcome to SoulMate, " . $uname . "!";
-				header('location: home.php');
+				header('location: index.php');
 			} else {
 				header('location: profile-input.php');
 			}
@@ -128,7 +128,7 @@ if(isset($_POST['login'])){
 					$_SESSION['msg'] = "Welcome back, " . $uname . "!";
 
 
-					header('location: home.php');
+					header('location: index.php');
 				} else {
 					header('location: profile-input.php');
 				}
@@ -369,7 +369,7 @@ if(isset($_POST['change-password'])){
     			}
     			$_SESSION['msg_header'] = "Welcome to SoulMate";
     			$_SESSION['msg'] = "Your profile has been created successfully";
-    			header('location: home.php');
+    			header('location: index.php');
     		} else {
     			consoleLog("Error creating profile");
     			consoleLog(mysqli_error($con));
@@ -715,7 +715,7 @@ if(isset($_POST['change-password'])){
     	if($res) echo "Blocked user";
     	else echo "error";
 
-    	header('location: home.php');
+    	header('location: index.php');
     }
 
     if(isset($_POST['show-profile'])) {

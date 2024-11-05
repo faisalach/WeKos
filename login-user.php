@@ -16,12 +16,12 @@ if($email != false && $password != false){
 				header('Location: reset-code.php');
 			}
 			if($profile_created == "yes") {
-				header('Location: home.php');
+				header('Location: index.php');
 			}
 		}else if($status == "notverified"){
 			header('Location: user-otp.php');
 		} else {
-			header('Location: home.php');
+			header('Location: index.php');
 		}
 	}
 }

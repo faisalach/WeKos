@@ -82,7 +82,7 @@
  
 <!-- NAVBAR -->
  <nav class="navbar navbar-light navbar-expand" >
-  <a class="navbar-brand ml-5" href="home.php">
+  <a class="navbar-brand ml-5" href="index.php">
     <img src="./public/assets/SoulMate (3).png" alt="logo" height="60">
   </a>   
   <div class="navbar-nav ml-auto mr-5 d-flex align-items-end">

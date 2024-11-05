@@ -37,7 +37,7 @@ $matches = matches($uid);
 
 	<!-- NAVBAR -->
 	<nav class="navbar navbar-light navbar-expand" >
-		<a class="navbar-brand ml-md-5" href="home.php">
+		<a class="navbar-brand ml-md-5" href="index.php">
 			<img src="./public/assets/logo.png" alt="logo" height="60">
 		</a>   
 		<div class="navbar-nav ml-auto mr-md-5 d-flex align-items-center">
