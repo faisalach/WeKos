@@ -5,6 +5,8 @@ require "connection.php";
 $email = "";
 $errors = array();
 $root_folder 	= $_SERVER["DOCUMENT_ROOT"]."/Wekos/";
+echo $root_folder;
+exit;
 
 function consoleLog($x) {
 	echo '<script type="text/javascript">' . 'console.log' . '(' . '"' . $x . '"' . ');</script>';
