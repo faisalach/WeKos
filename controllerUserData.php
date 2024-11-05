@@ -269,7 +269,7 @@ if(isset($_POST['change-password'])){
 
         //social table
     	$_POST['ig'] == "" ? $ig = NULL : $ig = mysqli_real_escape_string($con, $_POST['ig']);
-    	$_POST['sc'] == "" ? $sc = NULL : $sc = mysqli_real_escape_string($con, $_POST['sc']);
+    	$_POST['tiktok'] == "" ? $sc = NULL : $sc = mysqli_real_escape_string($con, $_POST['tiktok']);
     	$_POST['twit'] == "" ? $twit = NULL : $twit = mysqli_real_escape_string($con, $_POST['twit']);
     	$_POST['fb'] == "" ? $fb = NULL : $fb = mysqli_real_escape_string($con, $_POST['fb']);
     	$query = "INSERT INTO social VALUES ('$uid', '$ig', '$sc', '$twit', '$fb')";
@@ -388,38 +388,75 @@ if(isset($_POST['change-password'])){
     		$fetch = mysqli_fetch_assoc($run_query);
     		$uid = $fetch['uid'];
     	}
-        //update userprofile
-    	$query = "";
-    	$name = $_POST['fname'] . " " . $_POST['lname'];
-    	$name = mysqli_real_escape_string($con, $name);
-    	$age = mysqli_real_escape_string($con, $_POST['age']);
-    	$gender = mysqli_real_escape_string($con, $_POST['gender']);
-    	$_POST['height'] == "" ? $height = NULL : $height = mysqli_real_escape_string($con, $_POST['height']);  
-    	$_POST['weight'] == "" ? $weight = NULL : $weight = mysqli_real_escape_string($con, $_POST['weight']);     
-    	$profile_photo = ""; 
-    	$bio = mysqli_real_escape_string($con, $_POST['bio']);
-    	$target_dir = "public/user-profiles/";
-    	$target_file = $target_dir . $_FILES["profile_photo"]["name"];
-    	$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+        //update userprofile    	
+    	$name 			= mysqli_real_escape_string($con, $_POST['name']);
+    	$birth_date		= mysqli_real_escape_string($con, $_POST['tgl_lahir']);
+    	$gender 		= mysqli_real_escape_string($con, $_POST['gender']);
+    	$height 		= mysqli_real_escape_string($con, $_POST['height']);
+    	$weight 		= mysqli_real_escape_string($con, $_POST['weight']);
+    	$province_id	= mysqli_real_escape_string($con, $_POST['asal_provinsi']);
+    	$regencies_id	= mysqli_real_escape_string($con, $_POST['asal_kota']);
+    	$address 		= mysqli_real_escape_string($con, $_POST['address']);
+    	$bio 			= mysqli_real_escape_string($con, $_POST['bio']);
+    	$fakultas_id	= mysqli_real_escape_string($con, $_POST['fakultas']);
+    	$jurusan_id		= mysqli_real_escape_string($con, $_POST['jurusan']);
+    	$tahun_masuk	= mysqli_real_escape_string($con, $_POST['tahun_masuk']);
+    	$organisasi		= mysqli_real_escape_string($con, $_POST['organisasi']);
+    	
+    	$profile_photo 	= ""; 
+    	$target_dir 	= "public/user-profiles/";
+    	$target_file 	= $target_dir . $_FILES["profile_photo"]["name"];
+    	$imageFileType 	= strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
         //validate file type, must be only image
     	if(!file_exists($_FILES['profile_photo']['tmp_name']) || !is_uploaded_file($_FILES['profile_photo']['tmp_name'])) {
-    		$query = "UPDATE userprofile SET name='$name', age='$age', gender='$gender', height='$height', weight='$weight', bio='$bio' WHERE uid = '$uid'";
+    		$query = "UPDATE userprofile SET 
+    		name='$name',
+    		birth_date='$birth_date',
+    		gender='$gender',
+    		height='$height',
+    		weight='$weight',
+    		province_id='$province_id',
+    		regencies_id='$regencies_id',
+    		address='$address',
+    		bio='$bio',
+    		fakultas_id='$fakultas_id',
+    		jurusan_id='$jurusan_id',
+    		tahun_masuk='$tahun_masuk',
+    		organisasi='$organisasi'
+    		WHERE uid = '$uid'";
     	} else {
-    		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg")
+    		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"){
     			$errors['imageFileType'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-    		else {
+    		}else {
     			move_uploaded_file($_FILES["profile_photo"]["tmp_name"], $_SERVER["DOCUMENT_ROOT"]."/SoulMate/public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"]);
     			$profile_photo = "./public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"];
                 //get old photo url
-    			$query = "SELECT profile_photo FROM userprofile WHERE uid='$uid'";
-    			$res = mysqli_query($con, $query);
-    			$fetch = mysqli_fetch_assoc($run_query);
-    			$old_profile_photo = $fetch['profile_photo'];
-    			$url = $_SERVER["DOCUMENT_ROOT"]."/SoulMate" . substr($old_profile_photo, 1);
-                // if($old_profile_photo != $profile_photo) unlink(realpath($url));
-    			$query = "UPDATE userprofile SET name='$name', age='$age', gender='$gender', height='$height', weight='$weight', profile_photo='$profile_photo', bio='$bio' WHERE uid = '$uid'";
+    			$query 	= "SELECT profile_photo FROM userprofile WHERE uid='$uid'";
+    			$res 	= mysqli_query($con, $query);
+    			$fetch 	= mysqli_fetch_assoc($run_query);
+    			$old 	= $fetch['profile_photo'];
+    			$url 	= $_SERVER["DOCUMENT_ROOT"]."/SoulMate" . substr($old, 1);
+                // if($old != $profile_photo) unlink(realpath($url));
+
+    			$query = "UPDATE userprofile SET 
+    			profile_photo='$profile_photo',
+    			name='$name',
+    			birth_date='$birth_date',
+    			gender='$gender',
+    			height='$height',
+    			weight='$weight',
+    			province_id='$province_id',
+    			regencies_id='$regencies_id',
+    			address='$address',
+    			bio='$bio',
+    			fakultas_id='$fakultas_id',
+    			jurusan_id='$jurusan_id',
+    			tahun_masuk='$tahun_masuk',
+    			organisasi='$organisasi'
+    			WHERE uid = '$uid'";
     		}
     	}
+
     	$result = mysqli_query($con, $query);
     	if($result){
     		consoleLog("userprofile updated");
@@ -427,12 +464,18 @@ if(isset($_POST['change-password'])){
     		consoleLog(mysqli_error($con));
     		$err_count++;
     	}
+
         //update social
-    	$_POST['ig'] == "" ? $ig = NULL : $ig = mysqli_real_escape_string($con, $_POST['ig']);
-    	$_POST['sc'] == "" ? $sc = NULL : $sc = mysqli_real_escape_string($con, $_POST['sc']);
-    	$_POST['twit'] == "" ? $twit = NULL : $twit = mysqli_real_escape_string($con, $_POST['twit']);
-    	$_POST['fb'] == "" ? $fb = NULL : $fb = mysqli_real_escape_string($con, $_POST['fb']);
-    	$query = "UPDATE social SET ig='$ig', sc='$sc', twit='$twit', fb='$fb' WHERE uid = '$uid'";
+    	$ig 	= mysqli_real_escape_string($con, $_POST['ig']);
+    	$tiktok	= mysqli_real_escape_string($con, $_POST['tiktok']);
+    	$twit 	= mysqli_real_escape_string($con, $_POST['twit']);
+    	$fb 	= mysqli_real_escape_string($con, $_POST['fb']);
+    	$query 	= "UPDATE social SET 
+    	ig='$ig',
+    	tiktok='$tiktok',
+    	twit='$twit',
+    	fb='$fb' 
+    	WHERE uid = '$uid'";
     	$result = mysqli_query($con, $query);
     	if($result){
     		consoleLog("social updated");
@@ -440,79 +483,11 @@ if(isset($_POST['change-password'])){
     		consoleLog(mysqli_error($con));
     		$err_count++;
     	}
-        //update career
-    	$status = mysqli_real_escape_string($con, $_POST['status']);
-    	$job = mysqli_real_escape_string($con, $_POST['job']);
-    	$_POST['college'] == "" ? $college = NULL : $college = mysqli_real_escape_string($con, $_POST['college']);
-    	$entre = mysqli_real_escape_string($con, $_POST['entre']);        
-    	$_POST['owns_biz'] == "" ? $owns_biz = NULL : $owns_biz = mysqli_real_escape_string($con, $_POST['owns_biz']);
-    	$query = "UPDATE career SET status='$status', job_desc='$job', college='$college', entre='$entre', owns_biz='$owns_biz' WHERE uid = '$uid'";
-    	$result = mysqli_query($con, $query);
-    	if($result){
-    		consoleLog("career updated");
-    	} else {
-    		consoleLog(mysqli_error($con));
-    		$err_count++;
-    	}
-        //update hobbies
-    	isset($_POST['streaming_movies_and_shows']) ? $streaming_movies_and_shows = mysqli_real_escape_string($con, $_POST['streaming_movies_and_shows']) : $streaming_movies_and_shows = 0;
-    	isset($_POST['anime']) ? $anime = mysqli_real_escape_string($con, $_POST['anime']) : $anime = 0;
-    	isset($_POST['stand_up_comedy']) ? $stand_up_comedy = mysqli_real_escape_string($con, $_POST['stand_up_comedy']) : $stand_up_comedy = 0;
-    	isset($_POST['reading']) ? $reading = mysqli_real_escape_string($con, $_POST['reading']) : $reading = 0;
-    	isset($_POST['writing']) ? $writing = mysqli_real_escape_string($con, $_POST['writing']) : $writing = 0;
-    	isset($_POST['meditation']) ? $meditation = mysqli_real_escape_string($con, $_POST['meditation']) : $meditation = 0;
-    	isset($_POST['music']) ? $music = mysqli_real_escape_string($con, $_POST['music']) : $music = 0;
-    	isset($_POST['eating']) ? $eating = mysqli_real_escape_string($con, $_POST['eating']) : $eating = 0;
-    	isset($_POST['dancing']) ? $dancing = mysqli_real_escape_string($con, $_POST['dancing']) : $dancing = 0;
-    	isset($_POST['singing']) ? $singing = mysqli_real_escape_string($con, $_POST['singing']) : $singing = 0;
-    	isset($_POST['baking']) ? $baking = mysqli_real_escape_string($con, $_POST['baking']) : $baking = 0;
-    	isset($_POST['cooking']) ? $cooking = mysqli_real_escape_string($con, $_POST['cooking']) : $cooking = 0;
-    	isset($_POST['gardening']) ? $gardening = mysqli_real_escape_string($con, $_POST['gardening']) : $gardening = 0;
-    	isset($_POST['arts_and_crafts']) ? $arts_and_crafts = mysqli_real_escape_string($con, $_POST['arts_and_crafts']) : $arts_and_crafts = 0;
-    	isset($_POST['painting']) ? $painting = mysqli_real_escape_string($con, $_POST['painting']) : $painting = 0;
-    	isset($_POST['sketching']) ? $sketching = mysqli_real_escape_string($con, $_POST['sketching']) : $sketching = 0;
-    	isset($_POST['fishing']) ? $fishing = mysqli_real_escape_string($con, $_POST['fishing']) : $fishing = 0;
-    	isset($_POST['running']) ? $running = mysqli_real_escape_string($con, $_POST['running']) : $running = 0;
-    	isset($_POST['walking']) ? $walking = mysqli_real_escape_string($con, $_POST['walking']) : $walking = 0;
-    	isset($_POST['swimming']) ? $swimming = mysqli_real_escape_string($con, $_POST['swimming']) : $swimming = 0;
-    	isset($_POST['working_out']) ? $working_out = mysqli_real_escape_string($con, $_POST['working_out']) : $working_out = 0;
-    	isset($_POST['yoga']) ? $yoga = mysqli_real_escape_string($con, $_POST['yoga']) : $yoga = 0;
-    	isset($_POST['bicycling']) ? $bicycling = mysqli_real_escape_string($con, $_POST['bicycling']) : $bicycling = 0;
-    	isset($_POST['driving']) ? $driving = mysqli_real_escape_string($con, $_POST['driving']) : $driving = 0;
-    	isset($_POST['riding']) ? $riding = mysqli_real_escape_string($con, $_POST['riding']) : $riding = 0;
-    	isset($_POST['sports']) ? $sports = mysqli_real_escape_string($con, $_POST['sports']) : $sports = 0;
-    	isset($_POST['video_games']) ? $video_games = mysqli_real_escape_string($con, $_POST['video_games']) : $video_games = 0;
-    	isset($_POST['travelling']) ? $travelling = mysqli_real_escape_string($con, $_POST['travelling']) : $travelling = 0;
-    	isset($_POST['hiking']) ? $hiking = mysqli_real_escape_string($con, $_POST['hiking']) : $hiking = 0;
-    	isset($_POST['collecting']) ? $collecting = mysqli_real_escape_string($con, $_POST['collecting']) : $collecting = 0;
-    	isset($_POST['volunteer_work']) ? $volunteer_work = mysqli_real_escape_string($con, $_POST['volunteer_work']) : $volunteer_work = 0;
-    	isset($_POST['working']) ? $working = mysqli_real_escape_string($con, $_POST['working']) : $working = 0;
-    	isset($_POST['audiobooks_and_podcasts']) ? $audiobooks_and_podcasts = mysqli_real_escape_string($con, $_POST['audiobooks_and_podcasts']) : $audiobooks_and_podcasts = 0;
-    	isset($_POST['youtube']) ? $youtube = mysqli_real_escape_string($con, $_POST['youtube']) : $youtube = 0;
-    	isset($_POST['social_media']) ? $social_media = mysqli_real_escape_string($con, $_POST['social_media']) : $social_media = 0;
-    	isset($_POST['housework']) ? $housework = mysqli_real_escape_string($con, $_POST['housework']) : $housework = 0;
-    	isset($_POST['shopping']) ? $shopping = mysqli_real_escape_string($con, $_POST['shopping']) : $shopping = 0;
-    	isset($_POST['coding']) ? $coding = mysqli_real_escape_string($con, $_POST['coding']) : $coding = 0;
-    	isset($_POST['hacking']) ? $hacking = mysqli_real_escape_string($con, $_POST['hacking']) : $hacking = 0;
-    	isset($_POST['photoshop']) ? $photoshop = mysqli_real_escape_string($con, $_POST['photoshop']) : $photoshop = 0;
-    	isset($_POST['video_editing']) ? $video_editing = mysqli_real_escape_string($con, $_POST['video_editing']) : $video_editing = 0;
-    	isset($_POST['filmmaking']) ? $filmmaking = mysqli_real_escape_string($con, $_POST['filmmaking']) : $filmmaking = 0;
-    	isset($_POST['science']) ? $science = mysqli_real_escape_string($con, $_POST['science']) : $science = 0;
-    	isset($_POST['astronomy']) ? $astronomy = mysqli_real_escape_string($con, $_POST['astronomy']) : $astronomy = 0;
-    	isset($_POST['astrology']) ? $astrology = mysqli_real_escape_string($con, $_POST['astrology']) : $astrology = 0;
-    	$query = "UPDATE hobbies SET streaming_movies_and_shows='$streaming_movies_and_shows', anime='$anime', stand_up_comedy='$stand_up_comedy', reading='$reading', reading='$writing', meditation='$meditation', music='$music', eating='$eating', dancing='$dancing', singing='$singing', baking='$baking', cooking='$cooking', arts_and_crafts='$gardening', arts_and_crafts='$arts_and_crafts', painting='$painting', sketching='$sketching', fishing='$fishing', running='$running', walking='$walking', swimming='$swimming', working_out='$working_out', yoga='$yoga', bicycling='$bicycling', driving='$driving', riding='$riding', sports='$sports', video_games='$video_games', travelling='$travelling', hiking='$hiking', collecting='$collecting', volunteer_work='$volunteer_work', working='$working', audiobooks_and_podcasts='$audiobooks_and_podcasts', youtube='$youtube', social_media='$social_media', housework='$housework', shopping='$shopping', coding='$coding', hacking='$hacking', photoshop='$photoshop', video_editing='$video_editing', filmmaking='$filmmaking', science='$science', astrology='$astrology', astronomy='$astronomy' WHERE uid='$uid'";
-    	$result = mysqli_query($con, $query);
-    	if($result){
-    		consoleLog("hobbies updated");
-    	} else {
-    		$err_count++;
-    		consoleLog(mysqli_error($con));
-    	}
 
     	if($err_count == 0) {
     		$_SESSION['msg_header'] = "Profile Update";
     		$_SESSION['msg'] = "Your profile has been updated successfully";
-    		header('location: home.php');
+    		header('location: edit-profile.php');
     	}
     }
 
@@ -633,58 +608,57 @@ if(isset($_POST['change-password'])){
 
     //fetch all cards
     if(isset($_POST['get_cards'])) {
-    	$uid = $_POST['uid1'];
-    	$cards = Array();
+    	$uid 		= $_POST['uid1'];
+    	$cards 		= Array();
     	$coordsList = "";
-    	$noCards = true;
+    	$noCards 	= true;
         //get gender of current user
-    	$query = "SELECT gender FROM userprofile WHERE uid='$uid'";
-    	$res = mysqli_query($con, $query);
-    	$gender = mysqli_fetch_assoc($res)['gender'];
+    	$query 		= "SELECT gender FROM userprofile WHERE uid='$uid'";
+    	$res 		= mysqli_query($con, $query);
+    	$gender 	= mysqli_fetch_assoc($res)['gender'];
         //fetch all cards of opposite gender
-    	$query = "SELECT * FROM userprofile t1 NATURAL JOIN career WHERE t1.gender != '$gender'";
-    	$res = mysqli_query($con, $query);
+
+    	$query 		= "SELECT t1.*,t2.name as nama_jurusan FROM userprofile t1 
+    	LEFT JOIN jurusan t2 ON t2.id = t1.jurusan_id
+    	WHERE t1.gender = '$gender' AND t1.uid != '$uid'";
+    	$res 		= mysqli_query($con, $query);
     	while ($row = mysqli_fetch_assoc($res)) {
     		$showCard = true;
-    		$uid2 = $row['uid'];
-    		$query = "SELECT * FROM `match` WHERE uid1 in ('$uid', '$uid2') AND uid2 in ('$uid', '$uid2')";
+    		$uid2 	= $row['uid'];
+    		$query 	= "SELECT * FROM `match` WHERE uid1 in ('$uid', '$uid2') AND uid2 in ('$uid', '$uid2')";
     		$user_res = mysqli_query($con, $query);
+
             //don't show user if already matched or if blocked
     		if(mysqli_num_rows($user_res) == 1) {
     			$fetch = mysqli_fetch_assoc($user_res);
     			if($fetch['status'] == 'match' || $fetch['status'] == 'blocked') $showCard = false;
     			if($fetch['first_liked_by'] == $uid) $showCard = false;
     		}
+
     		if($showCard) {
-    			$noCards = false;
-    			$id = $row['uid'];
-    			$name = ucwords($row['name']);
-    			$age = $row['age'];
-    			$gender = $row['gender'];
-    			$profile_photo = $row['profile_photo'];
-    			$bio = nl2br($row['bio']);
-    			$status = ucfirst($row['status']);
-    			$status_desc = ucwords($row['job_desc']);
-    			$status_loc = ucwords($row['college']);
-    			$latitude = $row['latitude'];
-    			$longitude = $row['longitude'];
-    			$coordsList .= $latitude . "," . "$longitude" . ";";
+    			$noCards		= false;
+    			$id 			= $row['uid'];
+    			$name 			= ucwords($row['name']);
+    			$tanggal_lahir 	= new DateTime($row["birth_date"]);
+    			$sekarang 		= new DateTime("today");
+    			$age 			= $sekarang->diff($tanggal_lahir)->y;
+    			$gender			= $row['gender'];
+    			$profile_photo	= $row['profile_photo'];
+    			$jurusan		= $row['nama_jurusan'];
+    			$bio 			= nl2br($row['bio']);
     			$card = Array(
     				"uid" => $id,
     				"name" => $name,
     				"age" => $age,
     				"gender" => $gender,
     				"profile_photo" => $profile_photo,
-    				"bio" => $bio,
-    				"status" => $status,
-    				"status_desc" => $status_desc,
-    				"status_loc" => $status_loc
+    				"jurusan" => $jurusan,
+    				"bio" => $bio
     			);
     			array_push($cards, $card);
     		}
     	}
     	if(count($cards) == 0) $noCards = true;
-    	array_push($cards, Array("coordsList" => $coordsList));
     	array_push($cards, Array("noCards" => $noCards));
     	echo json_encode($cards);
     }
@@ -742,6 +716,26 @@ if(isset($_POST['change-password'])){
     	else echo "error";
 
     	header('location: home.php');
+    }
+
+    if(isset($_POST['show-profile'])) {
+    	$uid 	= $_POST["uid"];
+    	$query = "SELECT userprofile.*, 
+    	social.*,
+    	fakultas.name as nama_fakultas,
+    	jurusan.name as nama_jurusan,
+    	provinces.name as nama_provinsi,
+    	regencies.name as nama_kota
+    	FROM userprofile 
+    	LEFT JOIN fakultas ON fakultas.id=userprofile.fakultas_id
+    	LEFT JOIN jurusan ON jurusan.id=userprofile.jurusan_id
+    	LEFT JOIN provinces ON provinces.id=userprofile.province_id
+    	LEFT JOIN regencies ON regencies.id=userprofile.regencies_id
+    	LEFT JOIN social ON social.uid=userprofile.uid
+    	WHERE userprofile.uid = $uid";
+    	$res = mysqli_query($con, $query);
+
+    	echo json_encode(mysqli_fetch_assoc($res));
     }
 
     ?>

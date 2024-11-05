@@ -29,58 +29,6 @@ if($email != false && $password != false){
 <?php include_once 'header.php'; ?>
 <body>
     <div class="container">
-        <!-- <div class="row justify-content-center">
-            <div class="col-md-4 form">
-                <div class="text-center border-bottom py-2">
-                    <img src="./public/assets/SoulMate (3).png" alt="logo" height="100">
-                </div>
-                <form action="signup-user.php" method="POST" autocomplete="">
-                    <h2 class="text-center">Signup Form</h2>
-                    <p class="text-center">Register and find your Soulmate</p>
-                    <?php
-                    if(count($errors) == 1){
-                        ?>
-                        <div class="alert alert-danger text-center">
-                            <?php
-                            foreach($errors as $showerror){
-                                echo $showerror;
-                            }
-                            ?>
-                        </div>
-                        <?php
-                    }elseif(count($errors) > 1){
-                        ?>
-                        <div class="alert alert-danger">
-                            <?php
-                            foreach($errors as $showerror){
-                            ?>
-                                <li><?php echo $showerror; ?></li>
-                            <?php
-                            }
-                            ?>
-                        </div>
-                        <?php
-                    }
-                    ?>
-                    <div class="form-group">
-                        <label for="email" class="form-label">Email</label>
-                        <input class="form-control" id="email" type="email" name="email" placeholder="Email Address" required value="<?php echo $email ?>" onkeyup="validateEmail(this.value);">
-                    </div>
-                    <div class="form-group">
-                        <label for="password" class="form-label">Password</label>
-                        <input class="form-control" type="password" name="password" placeholder="Password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="cpassword" class="form-label">Confirm Password</label>
-                        <input class="form-control" type="password" name="cpassword" placeholder="Confirm password" required>
-                    </div>
-                    <div class="form-group">
-                        <input class="form-control button" type="submit" name="signup" value="Signup">
-                    </div>
-                    <div class="link login-link text-center">Already a member? <a href="login-user.php">Login here</a></div>
-                </form>
-            </div>
-        </div> -->
         <div class="row justify-content-center">
             <div class="col-md-4 my-0 p-0 shadow" style="min-height: 100vh">
                 <div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 339px)">

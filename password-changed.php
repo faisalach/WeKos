@@ -39,8 +39,6 @@ if($_SESSION['info'] == false){
     </style>
 </head>
 <body>
-    <img id="gif" src="./public/assets/43295-heart-fly-transparent-bg.gif" alt="" >
-
     <div class="container">
         <div class="row">
             <div class="col-md-4 form login-form">
@@ -55,12 +53,10 @@ if($_SESSION['info'] == false){
             ?>
                 <form action="login-user.php" method="POST">
                     <div class="form-group">
-                        <input class="form-control button" type="submit" name="login-now" value="Login Now">
+                        <input class="btn btn-primary btn-block py-2 rounded" type="submit" name="login-now" value="Login Now">
                     </div>
                 </form>
             </div>
-        <div class="vr"></div>
-        <img src="./public/assets/SoulMate (3).png" alt="logo" height="100">
         </div>
     </div>
     

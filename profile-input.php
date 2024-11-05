@@ -41,7 +41,7 @@ if($email != false && $password != false){
     </style>
 </head>
 <body>
-  <img id="gif" src="./public/assets/43295-heart-fly-transparent-bg.gif" alt="" >
+  <!-- <img id="gif" src="./public/assets/43295-heart-fly-transparent-bg.gif" alt="" > -->
 
   <a href="javascript:void(0);" class="logo" title="Home">
     <img src="./public/assets/SoulMate (3).png" alt="logo" height="50">

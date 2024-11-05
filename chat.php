@@ -42,7 +42,7 @@
   }
 
   //fetch profile pic url
-  $query = "SELECT profile_photo, latitude, longitude, name FROM userprofile WHERE uid='$uid'";
+  $query = "SELECT profile_photo, name FROM userprofile WHERE uid='$uid'";
   $res = mysqli_query($con, $query);
   $fetch = mysqli_fetch_assoc($res);
   $profile_photo = $fetch['profile_photo'];
@@ -68,7 +68,7 @@
 
 <body>
 <!-- BACKGROUND GIF -->
-  <img id="gif" src="./public/assets/43295-heart-fly-transparent-bg.gif" alt="" >
+  <!-- <img id="gif" src="./public/assets/43295-heart-fly-transparent-bg.gif" alt="" > -->
 
 
 <!-- LOADER -->

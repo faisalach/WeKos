@@ -180,7 +180,7 @@
 
 <body>
 <!-- GIF BACKGROUND -->
-  <img id="gif" src="./public/assets/43295-heart-fly-transparent-bg.gif" alt="" >
+  <!-- <img id="gif" src="./public/assets/43295-heart-fly-transparent-bg.gif" alt="" > -->
 
 <!-- TOAST -->
   <?php if(isset($_SESSION['msg']) && $_SESSION['msg'] != "") { ?>
