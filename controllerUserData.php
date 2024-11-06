@@ -513,7 +513,7 @@ if(isset($_POST['change-password'])){
 
     		$_SESSION['msg_header'] = "Profile Update";
     		$_SESSION['msg'] = "Your profile has been updated successfully";
-    		echo "<script>location.href = 'edit-profile.php';</script>";
+    		echo "<script>location.href = 'index.php';</script>";
     		exit;
     	}
     }
