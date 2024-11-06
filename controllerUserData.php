@@ -475,6 +475,9 @@ if(isset($_POST['change-password'])){
     		fb='$fb' ";
     	}
     	$result = mysqli_query($con, $query);
+
+    	var_dump($query);
+    	exit;
     	if($result){
     		consoleLog("social updated");
     	} else {
@@ -482,8 +485,6 @@ if(isset($_POST['change-password'])){
     		$err_count++;
     	}
 
-    	var_dump($err_count);
-    	exit;
 
     	if($err_count == 0) {
     		$query = "SELECT profile_created FROM usertable WHERE uid=$uid";
