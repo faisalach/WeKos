@@ -144,10 +144,10 @@ function displayCardsOver() {
 }
 
 function showBio(e) {
-	let height = parseInt(e.children[0].children[2].offsetHeight);
-	e.children[0].style.setProperty('top', `calc(85% - ${height + 10}px)`);
+	/*let height = parseInt(e.children[0].children[2].offsetHeight);
+	e.children[0].style.setProperty('top', `calc(85% - ${height + 10}px)`);*/
 }
 function hideBio(e) {
-	let height = e.children[0].children[2].offsetHeight;
-	e.children[0].style.setProperty('top', `85%`);
+	/*let height = e.children[0].children[2].offsetHeight;
+	e.children[0].style.setProperty('top', `85%`);*/
 }
