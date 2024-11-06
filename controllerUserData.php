@@ -476,8 +476,6 @@ if(isset($_POST['change-password'])){
     	}
     	$result = mysqli_query($con, $query);
 
-    	var_dump($query);
-    	exit;
     	if($result){
     		consoleLog("social updated");
     	} else {
