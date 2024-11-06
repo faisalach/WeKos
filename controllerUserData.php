@@ -351,37 +351,11 @@ if(isset($_POST['change-password'])){
     	$imageFileType 	= strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
         //validate file type, must be only image
     	if(!file_exists($_FILES['profile_photo']['tmp_name']) || !is_uploaded_file($_FILES['profile_photo']['tmp_name'])) {
-    		$query = "UPDATE userprofile SET 
-    		name='$name',
-    		birth_date='$birth_date',
-    		gender='$gender',
-    		height='$height',
-    		weight='$weight',
-    		province_id='$province_id',
-    		regencies_id='$regencies_id',
-    		address='$address',
-    		bio='$bio',
-    		fakultas_id='$fakultas_id',
-    		jurusan_id='$jurusan_id',
-    		tahun_masuk='$tahun_masuk',
-    		organisasi='$organisasi'
-    		WHERE uid = '$uid'";
-    	} else {
-    		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"){
-    			$errors['imageFileType'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-    		}else {
-    			move_uploaded_file($_FILES["profile_photo"]["tmp_name"], $root_folder."/public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"]);
-    			$profile_photo = "./public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"];
-                //get old photo url
-    			$query 	= "SELECT profile_photo FROM userprofile WHERE uid='$uid'";
-    			$res 	= mysqli_query($con, $query);
-    			$fetch 	= mysqli_fetch_assoc($res);
-    			$old 	= $fetch['profile_photo'];
-    			$url 	= $root_folder . substr($old, 1);
-                // if($old != $profile_photo) unlink(realpath($url));
 
+    		$query  = "SELECT uid FROM userprofile WHERE uid = '$uid'";
+    		$result     = mysqli_query($con,$query);
+    		if (mysqli_num_rows($result) > 0) {
     			$query = "UPDATE userprofile SET 
-    			profile_photo='$profile_photo',
     			name='$name',
     			birth_date='$birth_date',
     			gender='$gender',
@@ -396,6 +370,76 @@ if(isset($_POST['change-password'])){
     			tahun_masuk='$tahun_masuk',
     			organisasi='$organisasi'
     			WHERE uid = '$uid'";
+    		}else{
+    			$query = "INSERT INTO userprofile SET
+    			uid='$uid',
+    			name='$name',
+    			birth_date='$birth_date',
+    			gender='$gender',
+    			height='$height',
+    			weight='$weight',
+    			province_id='$province_id',
+    			regencies_id='$regencies_id',
+    			address='$address',
+    			bio='$bio',
+    			fakultas_id='$fakultas_id',
+    			jurusan_id='$jurusan_id',
+    			tahun_masuk='$tahun_masuk',
+    			organisasi='$organisasi'";
+    		}
+    	} else {
+    		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"){
+    			$errors['imageFileType'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+    		}else {
+    			move_uploaded_file($_FILES["profile_photo"]["tmp_name"], $root_folder."/public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"]);
+    			$profile_photo = "./public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"];
+                //get old photo url
+    			$query 	= "SELECT profile_photo FROM userprofile WHERE uid='$uid'";
+    			$res 	= mysqli_query($con, $query);
+    			$fetch 	= mysqli_fetch_assoc($res);
+    			$old 	= $fetch['profile_photo'];
+    			$url 	= $root_folder . substr($old, 1);
+                // if($old != $profile_photo) unlink(realpath($url));
+
+    			$query  = "SELECT uid FROM userprofile WHERE uid = '$uid'";
+    			$result     = mysqli_query($con,$query);
+    			if (mysqli_num_rows($result) > 0) {
+    				$query = "UPDATE userprofile SET 
+    				profile_photo='$profile_photo',
+    				name='$name',
+    				birth_date='$birth_date',
+    				gender='$gender',
+    				height='$height',
+    				weight='$weight',
+    				province_id='$province_id',
+    				regencies_id='$regencies_id',
+    				address='$address',
+    				bio='$bio',
+    				fakultas_id='$fakultas_id',
+    				jurusan_id='$jurusan_id',
+    				tahun_masuk='$tahun_masuk',
+    				organisasi='$organisasi'
+    				WHERE uid = '$uid'";
+    			}else{
+    				$query = "INSERT INTO userprofile SET
+    				uid='$uid',
+    				profile_photo='$profile_photo',
+    				name='$name',
+    				birth_date='$birth_date',
+    				gender='$gender',
+    				height='$height',
+    				weight='$weight',
+    				province_id='$province_id',
+    				regencies_id='$regencies_id',
+    				address='$address',
+    				bio='$bio',
+    				fakultas_id='$fakultas_id',
+    				jurusan_id='$jurusan_id',
+    				tahun_masuk='$tahun_masuk',
+    				organisasi='$organisasi'";
+    			}
+
+    			
     		}
     	}
 
@@ -412,12 +456,24 @@ if(isset($_POST['change-password'])){
     	$tiktok	= mysqli_real_escape_string($con, $_POST['tiktok']);
     	$twit 	= mysqli_real_escape_string($con, $_POST['twit']);
     	$fb 	= mysqli_real_escape_string($con, $_POST['fb']);
-    	$query 	= "UPDATE social SET 
-    	ig='$ig',
-    	tiktok='$tiktok',
-    	twit='$twit',
-    	fb='$fb' 
-    	WHERE uid = '$uid'";
+
+    	$query  = "SELECT uid FROM social WHERE uid = '$uid'";
+    	$result     = mysqli_query($con,$query);
+    	if (mysqli_num_rows($result) > 0) {
+	    	$query 	= "UPDATE social SET 
+	    	ig='$ig',
+	    	tiktok='$tiktok',
+	    	twit='$twit',
+	    	fb='$fb' 
+	    	WHERE uid = '$uid'";
+    	}else{
+    		$query 	= "INSERT INTO social SET 
+    		uid = '$uid',
+    		ig='$ig',
+    		tiktok='$tiktok',
+    		twit='$twit',
+    		fb='$fb' ";
+    	}
     	$result = mysqli_query($con, $query);
     	if($result){
     		consoleLog("social updated");
@@ -425,34 +481,33 @@ if(isset($_POST['change-password'])){
     		consoleLog(mysqli_error($con));
     		$err_count++;
     	}
-        var_dump($err_count);
-        exit;
+
     	if($err_count == 0) {
-            $query = "SELECT profile_created FROM usertable WHERE uid=$uid";
-            $result = mysqli_query($con, $query);
-            $check  = $result;
-            if($check["profile_created"] != 'yes') {
-                $query = "UPDATE usertable SET profile_created='yes' WHERE uid=$uid";
-                $result = mysqli_query($con, $query);
-                if($result) {
-                    consoleLog("Profile successfully created");
-                    $query = "INSERT INTO notification(uid, type, content) VALUES ($uid, 'default', 'Welcome to Wekos!'), ($uid, 'default', 'Browse through recommendations to find your perfect match!')";
-                    $res = mysqli_query($con, $query);
-                    if($res){
-                        consoleLog("Notifs added successfully");
-                    } else {
-                        consoleLog("Notifs error");
-                        consoleLog(mysqli_error($con));
-                    }
-                    $_SESSION['msg_header'] = "Welcome to Wekos";
-                    $_SESSION['msg'] = "Your profile has been created successfully";
-                    echo "<script>location.href = 'index.php';</script>";
-                    exit;
-                } else {
-                    consoleLog("Error creating profile");
-                    consoleLog(mysqli_error($con));
-                }
-            }
+    		$query = "SELECT profile_created FROM usertable WHERE uid=$uid";
+    		$result = mysqli_query($con, $query);
+    		$check  = $result;
+    		if($check["profile_created"] != 'yes') {
+    			$query = "UPDATE usertable SET profile_created='yes' WHERE uid=$uid";
+    			$result = mysqli_query($con, $query);
+    			if($result) {
+    				consoleLog("Profile successfully created");
+    				$query = "INSERT INTO notification(uid, type, content) VALUES ($uid, 'default', 'Welcome to Wekos!'), ($uid, 'default', 'Browse through recommendations to find your perfect match!')";
+    				$res = mysqli_query($con, $query);
+    				if($res){
+    					consoleLog("Notifs added successfully");
+    				} else {
+    					consoleLog("Notifs error");
+    					consoleLog(mysqli_error($con));
+    				}
+    				$_SESSION['msg_header'] = "Welcome to Wekos";
+    				$_SESSION['msg'] = "Your profile has been created successfully";
+    				echo "<script>location.href = 'index.php';</script>";
+    				exit;
+    			} else {
+    				consoleLog("Error creating profile");
+    				consoleLog(mysqli_error($con));
+    			}
+    		}
 
     		$_SESSION['msg_header'] = "Profile Update";
     		$_SESSION['msg'] = "Your profile has been updated successfully";
