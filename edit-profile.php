@@ -46,7 +46,7 @@ $data_jurusan 	= $data_jurusan_temp;
 				<h2 class="text-center">Basic Stuff</h2>
 			</div>
 			<div class="col-12 text-center my-4">
-				<img id="profile-pic" src="<?= $data_profile['profile_photo'] ?>" alt="" width="180" height="180" style="border-radius: 50%; object-fit: cover;cursor: pointer;" title="Click to change">
+				<img id="profile-pic" src="<?= !empty($data_profile['profile_photo']) ? $data_profile['profile_photo'] : "./profile-icon-png-910.png" ?>" alt="" width="180" height="180" style="border-radius: 50%; object-fit: cover;cursor: pointer;" title="Click to change">
 				<input type="file" id="profile-pic-upload" class="d-none" accept=".png, .jpg, .jpeg" onchange="document.getElementById('profile-pic').src = window.URL.createObjectURL(this.files[0]);" name="profile_photo">
 				<input type="text" class="form-control" id="photo-check" hidden>
 				<div class="invalid-feedback">Please upload a photo</div>   
