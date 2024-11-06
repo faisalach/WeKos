@@ -427,6 +427,32 @@ if(isset($_POST['change-password'])){
     	}
 
     	if($err_count == 0) {
+            $query = "SELECT profile_created FROM usertable WHERE uid=$uid";
+            $result = mysqli_query($con, $query);
+            $check  = $result;
+            if($check["profile_created"] != 'yes') {
+                $query = "UPDATE usertable SET profile_created='yes' WHERE uid=$uid";
+                $result = mysqli_query($con, $query);
+                if($result) {
+                    consoleLog("Profile successfully created");
+                    $query = "INSERT INTO notification(uid, type, content) VALUES ($uid, 'default', 'Welcome to Wekos!'), ($uid, 'default', 'Browse through recommendations to find your perfect match!')";
+                    $res = mysqli_query($con, $query);
+                    if($res){
+                        consoleLog("Notifs added successfully");
+                    } else {
+                        consoleLog("Notifs error");
+                        consoleLog(mysqli_error($con));
+                    }
+                    $_SESSION['msg_header'] = "Welcome to Wekos";
+                    $_SESSION['msg'] = "Your profile has been created successfully";
+                    echo "<script>location.href = 'index.php';</script>";
+                    exit;
+                } else {
+                    consoleLog("Error creating profile");
+                    consoleLog(mysqli_error($con));
+                }
+            }
+
     		$_SESSION['msg_header'] = "Profile Update";
     		$_SESSION['msg'] = "Your profile has been updated successfully";
     		echo "<script>location.href = 'edit-profile.php';</script>";
