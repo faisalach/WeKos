@@ -84,7 +84,7 @@ while ($row = mysqli_fetch_assoc($res)) {
 	<!-- NAVBAR -->
 	<nav class="navbar navbar-light navbar-expand" >
 		<a class="navbar-brand ml-5" href="index.php">
-			<img src="./public/assets/SoulMate (3).png" alt="logo" height="60">
+			<img src="./public/assets/logo.png" alt="logo" height="60">
 		</a>   
 		<div class="navbar-nav ml-auto mr-5 d-flex align-items-end">
 			<div class="nav-item h5 mb-0 pr-3" style="font-size: 24px; cursor: pointer;" ><a href="users.php">Chat</a></div>

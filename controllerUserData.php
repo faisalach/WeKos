@@ -117,7 +117,7 @@ if(isset($_POST['login'])){
 		$sql2 = mysqli_query($con, "UPDATE usertable SET active = '$status' WHERE uid = '$uid'");
 		if($sql2){
 			$_SESSION['unique_id'] = $unique_id;
-			echo "success";
+			// echo "success";
 		}
 
 		if(password_verify($password, $fetch_pass)){

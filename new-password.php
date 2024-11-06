@@ -12,7 +12,7 @@ if($email == false){
 		<div class="row justify-content-center">
 			<div class="col-md-4 my-0 p-0 shadow" style="min-height: 100vh">
 				<div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 263px)">
-					<img src="./public/assets/SoulMate (3).png" alt="logo" style="width: 75%">
+					<img src="./public/assets/logo.png" alt="logo" style="width: 75%">
 				</div>
 				<form class="p-4 bg-white" action="new-password.php" method="POST" autocomplete="off">
 					<h2 class="mb-4 font-weight-bold" style="font-size: 24px;">New Password</h2>

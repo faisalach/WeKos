@@ -12,7 +12,7 @@ if($email == false){
 		<div class="row justify-content-center">
 			<div class="col-md-4 my-0 p-0 shadow" style="min-height: 100vh">
 				<div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 223px)">
-					<img src="./public/assets/SoulMate (3).png" alt="logo" style="width: 75%">
+					<img src="./public/assets/logo.png" alt="logo" style="width: 75%">
 				</div>
 				<form class="p-4 bg-white" action="reset-code.php" method="POST" autocomplete="off">
 					<h2 class="mb-4 font-weight-bold">Code Verification</h2>

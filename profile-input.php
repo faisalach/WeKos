@@ -50,7 +50,7 @@ exit;
 	<!-- <img id="gif" src="./public/assets/43295-heart-fly-transparent-bg.gif" alt="" > -->
 
 	<a href="javascript:void(0);" class="logo" title="Home">
-		<img src="./public/assets/SoulMate (3).png" alt="logo" height="50">
+		<img src="./public/assets/logo.png" alt="logo" height="50">
 	</a> 
 
 	<div class="d-flex vh-100 justify-content-center align-items-center">
