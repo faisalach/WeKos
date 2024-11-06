@@ -487,7 +487,7 @@ if(isset($_POST['change-password'])){
     	if($err_count == 0) {
     		$query = "SELECT profile_created FROM usertable WHERE uid=$uid";
     		$result = mysqli_query($con, $query);
-    		$check  = $result;
+    		$check  = mysqli_fetch_assoc($result);
     		if($check["profile_created"] != 'yes') {
     			$query = "UPDATE usertable SET profile_created='yes' WHERE uid=$uid";
     			$result = mysqli_query($con, $query);
