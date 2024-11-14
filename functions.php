@@ -96,8 +96,10 @@ function profile_picture($uid)
 	$query = "SELECT profile_photo, name FROM userprofile WHERE uid='$uid'";
 	$res = mysqli_query($con, $query);
 	$fetch = mysqli_fetch_assoc($res);
-	$profile_photo = $fetch['profile_photo'];
-	$name = ucfirst(explode(" ", $fetch['name'])[0]);	
+	$profile_photo = !empty($fetch['profile_photo']) ? $fetch['profile_photo'] : "./profile-icon-png-910.png";
+	$name = ucfirst(explode(" ", $fetch['name'])[0]);
+
+
 
 	return [
 		"profile_photo" => $profile_photo,
