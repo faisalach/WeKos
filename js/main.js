@@ -42,6 +42,12 @@ allCards.forEach(function(el) {
 	});
 
 	hammertime.on('panend', function(event) {
+		if (event.deltaX < 0) {
+			$(nope).click();
+		}else{
+			$(love).click();
+		}
+		/*
 		el.classList.remove('moving');
 		tinderContainer.classList.remove('tinder_love');
 		tinderContainer.classList.remove('tinder_nope');
@@ -54,6 +60,7 @@ allCards.forEach(function(el) {
 		if (keep) {
 			event.target.style.transform = '';
 		} else {
+			
 			var endX = Math.max(Math.abs(event.velocityX) * moveOutWidth, moveOutWidth);
 			var toX = event.deltaX > 0 ? endX : -endX;
 			var endY = Math.abs(event.velocityY) * moveOutWidth;
@@ -65,14 +72,15 @@ allCards.forEach(function(el) {
 			event.target.style.transform =
 				'translate(' + toX + 'px, ' + (toY + event.deltaY) + 'px) rotate(' + rotate + 'deg)';
 			initCards();
-		}
+
+		}*/
 	});
 });
 
 function createButtonListener(love) {
 	return function(event) {
-		var cards = document.querySelectorAll('.tinder--card:not(.removed)');
 		var moveOutWidth = document.body.clientWidth * 1.5;
+		var cards = document.querySelectorAll('.tinder--card:not(.removed)');
 
 		if (!cards.length) return false;
 
@@ -97,7 +105,6 @@ function createButtonListener(love) {
 			checkMatch.append('choice', 'blocked');
 			card.style.transform = 'translate(-' + moveOutWidth + 'px, -100px) rotate(30deg)';
 		}
-
 		if (cards.length == 1) displayCardsOver();
 
 		$.ajax({
@@ -130,6 +137,10 @@ function createButtonListener(love) {
 	};
 }
 
+function update(argument) {
+	// body...
+}
+
 var nopeListener = createButtonListener(false);
 var loveListener = createButtonListener(true);
 
@@ -138,9 +149,9 @@ love.addEventListener('click', loveListener);
 
 function displayCardsOver() {
 	//hide like-dislike buttons
-	document.querySelector('.tinder').style.display = 'none';
+	$('.tinder').hide();
 	//display msg
-	document.querySelector('.cards-over').style.display = 'block !important';
+	$('.cards-over').show();
 }
 
 function showBio(e) {

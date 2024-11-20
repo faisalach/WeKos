@@ -1,7 +1,11 @@
 <?php require_once "controllerUserData.php"; ?>
 <?php include_once 'header.php'; ?>
 <?php include_once 'navbar.php'; ?>
-
+	<style>
+		.cards-over{
+			display: none;
+		}
+	</style>
 	<!-- HIDDEN INPUTS  -->
 	<input type="text" class="uid1-name" hidden value="<?php echo $name; ?>">
 	<input type="text" class="uid" hidden value="<?php echo $_SESSION['uid1']; ?>">
@@ -21,15 +25,15 @@
 		<div class="tinder--cards"></div>
 	</div>
 
-	<div class="cards-over " style="display: none;" id="cards-over-container">
+	<div class="cards-over container mt-4 mb-0" id="cards-over-container">
 		<div class="jumbotron">
 			<h1 class="display-4">Sorry!</h1>
 			<p class="lead">You've seen all potential matches in your search</p>
 			<hr class="my-4">
-			<p>Try again with a different combination to see if there are more</p>
-			<p class="lead">
+			<!-- <p>Try again with a different combination to see if there are more</p> -->
+			<!-- <p class="lead">
 				<a class="btn btn-primary btn-lg" href="#" role="button">Search <i class="fas fa-search"></i></a>
-			</p>
+			</p> -->
 		</div>
 	</div>
 

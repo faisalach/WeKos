@@ -2,8 +2,8 @@
 
 function pageForLogin(){
 	global $con;
-	$email = $_SESSION['email'];
-	$password = $_SESSION['password'];
+	$email = !empty($_SESSION['email']) ? $_SESSION['email'] : "";
+	$password = !empty($_SESSION['password']) ? $_SESSION['password'] : "";
 	$uid = "";
 
 	if (empty($email) || empty($password)) {
@@ -40,11 +40,13 @@ function matches($uid)
 	while ($row = mysqli_fetch_assoc($res)) {
 		$uid == $row['uid1'] ? $uid2 = $row['uid2'] : $uid2 = $row['uid1'];
 		// fetch fname, age of other partner
-		$query_inner = "SELECT name, age FROM userprofile WHERE uid='$uid2'";
+		$query_inner = "SELECT name, birth_date FROM userprofile WHERE uid='$uid2'";
 		$res_inner = mysqli_query($con, $query_inner);
 		$fetch_inner = mysqli_fetch_assoc($res_inner);
 		$name_inner = ucfirst(explode(" ", $fetch_inner['name'])[0]);
-		$age = $fetch_inner['age'];
+		$tanggal_lahir 	= new DateTime($fetch_inner["birth_date"]);
+		$sekarang 		= new DateTime("today");
+		$age 			= $sekarang->diff($tanggal_lahir)->y;
 		$date = dateFormatter($row['matched_at']);
 		array_push($matches, Array("name" => $name_inner, "age" => $age, "date" => $date, "id" => $uid2));
 	}
@@ -97,7 +99,7 @@ function profile_picture($uid)
 	$res = mysqli_query($con, $query);
 	$fetch = mysqli_fetch_assoc($res);
 	$profile_photo = !empty($fetch['profile_photo']) ? $fetch['profile_photo'] : "./profile-icon-png-910.png";
-	$name = ucfirst(explode(" ", $fetch['name'])[0]);
+	$name = !empty($fetch['name']) ? ucfirst(explode(" ", $fetch['name'])[0]) : "";
 
 
 

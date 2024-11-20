@@ -44,7 +44,7 @@ $matches = matches($uid);
 			<div class="nav-item h5 mb-0 position-relative" style="font-size: 32px; cursor: pointer;" tabindex="50"  data-toggle="popover-matches" data-trigger="focus" data-placement="bottom" title="Your Matches">
 				<i class="fas fa-fw fa-heart text-secondary"></i>
 				<?php if (!empty($matches)): ?>
-					<span class="position-absolute bg-danger text-white rounded" style="top: 0px;right: 0px;font-size: 12px;padding: 2px;">
+					<span class="position-absolute px-1 bg-danger text-white rounded" style="top: 0px;right: 0px;font-size: 12px;padding: 2px;">
 						<?= count($matches) ?>
 					</span>
 				<?php endif ?>
@@ -52,7 +52,7 @@ $matches = matches($uid);
 			<div class="nav-item h5 mb-0 ml-2 position-relative" style="font-size: 32px; cursor: pointer;" tabindex="50"  data-toggle="popover-notifs" data-trigger="focus" data-placement="bottom" title="Notifications">
 				<i class="fas fa-fw fa-bell text-secondary"></i>
 				<?php if (!empty($notifs_content_unseen)): ?>
-					<span class="position-absolute bg-danger text-white rounded" style="top: 0px;right: 0px;font-size: 12px;padding: 2px;">
+					<span class="position-absolute px-1 bg-danger text-white rounded" style="top: 0px;right: 0px;font-size: 12px;padding: 2px;">
 						<?= count($notifs_content_unseen) ?>
 					</span>
 				<?php endif ?>

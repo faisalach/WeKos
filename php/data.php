@@ -1,4 +1,16 @@
 <?php
+function profile_photo($profile_photo,$gender)
+{
+    if (empty($profile_photo) || !is_file("../".$profile_photo)) {
+        if ($gender == "M") {
+            $profile_photo  = "./public/assets/dummy-profile-image-male.jpg";
+        }else{
+            $profile_photo  = "./public/assets/dummy-profile-image-female.jpg";
+        }
+    }
+
+    return $profile_photo;
+}
     while($row = mysqli_fetch_assoc($query3)){
         $sql2 = "SELECT * FROM messages WHERE (incoming_msg_id = {$row['unique_id']}
                 OR outgoing_msg_id = {$row['unique_id']}) AND (outgoing_msg_id = {$outgoing_id} 
@@ -24,10 +36,11 @@
         $query3 = mysqli_query($con, $sql3);
         $row3 = mysqli_fetch_assoc($query3);
 */
+        $profile_photo  = profile_photo($row['profile_photo'],$row['gender']);
         $output .= '<a href="chat.php?user_id='. $row['unique_id'] .'">
                     <div class="content">
-                    <img src="'. $row['profile_photo'] .'" alt="">
-                    <div class="details">
+                    <img src="'. $profile_photo .'" alt="">
+                    <div class="details">  
                         <span>'. $row['name'].'</span>
                         <p>'. $you . $msg .'</p>
                     </div>

@@ -15,6 +15,18 @@ if (strpos($_SERVER["DOCUMENT_ROOT"], "xampp") !== false) {
 function consoleLog($x) {
 	echo '<script type="text/javascript">' . 'console.log' . '(' . '"' . $x . '"' . ');</script>';
 }
+function profile_photo($profile_photo,$gender)
+{
+    if (empty($profile_photo) || !is_file($profile_photo)) {
+        if ($gender == "M") {
+            $profile_photo  = "./public/assets/dummy-profile-image-male.jpg";
+        }else{
+            $profile_photo  = "./public/assets/dummy-profile-image-female.jpg";
+        }
+    }
+
+    return $profile_photo;
+}
 
 //if user signup button
 if(isset($_POST['signup'])){
@@ -671,10 +683,11 @@ if(isset($_POST['change-password'])){
     			$sekarang 		= new DateTime("today");
     			$age 			= $sekarang->diff($tanggal_lahir)->y;
     			$gender			= $row['gender'];
-    			$profile_photo	= $row['profile_photo'];
     			$jurusan		= $row['nama_jurusan'];
     			$bio 			= nl2br($row['bio']);
-    			$card = Array(
+    			$profile_photo	= profile_photo($row['profile_photo'],$gender);
+                
+                $card = Array(
     				"uid" => $id,
     				"name" => $name,
     				"age" => $age,
@@ -762,9 +775,12 @@ if(isset($_POST['change-password'])){
     	LEFT JOIN regencies ON regencies.id=userprofile.regencies_id
     	LEFT JOIN social ON social.uid=userprofile.uid
     	WHERE userprofile.uid = $uid";
-    	$res = mysqli_query($con, $query);
+    	$query = mysqli_query($con, $query);
+        $res    = mysqli_fetch_assoc($query);
 
-    	echo json_encode(mysqli_fetch_assoc($res));
+        $res["profile_photo"]   = profile_photo($res["profile_photo"],$res["gender"]);
+
+    	echo json_encode($res);
     }
 
     ?>

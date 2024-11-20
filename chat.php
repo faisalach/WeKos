@@ -1,71 +1,6 @@
-<?php 
-session_start();
-include_once "../connection.php";
-if(!isset($_SESSION['unique_id'])){
-	echo "<script>location.href = 'login-user.php';</script>";
-	exit;
-}
-
-$sql1 = mysqli_query($con, "SELECT * FROM usertable WHERE unique_id = {$_SESSION['unique_id']}");
-if(mysqli_num_rows($sql1) > 0){
-	$row1 = mysqli_fetch_assoc($sql1);
-}
-$uid = $row1['uid'];
-
-  //fetch notifs
-function dateFormatter($date) {
-	$today = date("d M, Y");
-	if($today == $date) return "Today";
-	$arr = explode(",", $date);
-	$year = $arr[1];
-	$arr = explode(" ", $arr[0]);
-	$day = intval($arr[0]);
-	$month = $arr[1];
-	$diff = intval(substr($today, 0, 2)) - $day;
-	if($diff == 1) return "Yesterday";
-	else return $date;
-}
-
-$notifs_content_seen = Array();
-$notifs_date_seen = Array();
-$notifs_content_unseen = Array();
-$notifs_date_unseen = Array();
-$sql = "SELECT type, content, DATE_FORMAT(created_at, '%d %b, %Y') as created_at, seen_by_user FROM notification WHERE uid='$uid' ORDER BY nid DESC";
-$run_Sql = mysqli_query($con, $sql);
-while ($row = mysqli_fetch_assoc($run_Sql)) {
-	if($row['seen_by_user'] == 'yes') {
-		array_push($notifs_content_seen, $row['content']);
-		array_push($notifs_date_seen, dateFormatter($row['created_at']));
-	} else {
-		array_push($notifs_content_unseen, $row['content']);
-		array_push($notifs_date_unseen, dateFormatter($row['created_at']));      
-	}
-}
-
-  //fetch profile pic url
-$query = "SELECT profile_photo, name FROM userprofile WHERE uid='$uid'";
-$res = mysqli_query($con, $query);
-$fetch = mysqli_fetch_assoc($res);
-$profile_photo = $fetch['profile_photo'];
-$name = ucfirst(explode(" ", $fetch['name'])[0]);
-
-  //fetch matches
-$matches = Array();
-$query = "SELECT uid1, uid2, status, DATE_FORMAT(created_at, '%d %b, %Y') as matched_at FROM `match` WHERE (uid1 = '$uid' OR uid2 = '$uid') AND status = 'match'";
-$res = mysqli_query($con, $query);
-while ($row = mysqli_fetch_assoc($res)) {
-	$uid == $row['uid1'] ? $uid2 = $row['uid2'] : $uid2 = $row['uid1'];
-    //fetch fname, age of other partner
-	$query_inner = "SELECT name, age FROM userprofile WHERE uid='$uid2'";
-	$res_inner = mysqli_query($con, $query_inner);
-	$fetch_inner = mysqli_fetch_assoc($res_inner);
-	$name_inner = ucfirst(explode(" ", $fetch_inner['name'])[0]);
-	$age = $fetch_inner['age'];
-	$date = dateFormatter($row['matched_at']);
-	array_push($matches, Array("name" => $name_inner, "age" => $age, "date" => $date, "id" => $uid2));
-} 
-?>
+<?php include_once "controllerUserData.php"; ?>
 <?php include_once "header.php"; ?>
+<?php include_once "navbar.php"; ?>
 
 <body>
 	<!-- BACKGROUND GIF -->
@@ -79,26 +14,6 @@ while ($row = mysqli_fetch_assoc($res)) {
 			<lottie-player id="lottie-player-heart" src="./public/assets/lf30_editor_drzgxbyf.json"  background="transparent"  speed="1.2"  style="width: 300px; height: 300px;" loop autoplay></lottie-player>
 		</div>
 	</div>
-
-
-	<!-- NAVBAR -->
-	<nav class="navbar navbar-light navbar-expand" >
-		<a class="navbar-brand ml-5" href="index.php">
-			<img src="./public/assets/logo.png" alt="logo" height="60">
-		</a>   
-		<div class="navbar-nav ml-auto mr-5 d-flex align-items-end">
-			<div class="nav-item h5 mb-0 pr-3" style="font-size: 24px; cursor: pointer;" ><a href="users.php">Chat</a></div>
-			<div class="nav-item h5 mb-0" style="font-size: 24px; cursor: pointer;<?php if(count($matches) != 0) echo "background-color: #FBCBD0;"; else echo "background-color: #F5E6E8;"; ?>" tabindex="50"  data-toggle="popover-matches" data-trigger="focus" data-placement="bottom" title="Your Matches">Matches</div>
-			<div class="nav-item ml-4" style="position: relative;"><img src="<?php echo $profile_photo; ?>" alt="profile pic" class="avatar" height="60" width="60" style="border-radius: 50%; cursor: pointer; object-fit: cover;" tabindex="50" data-toggle="popover-profile-icon" data-trigger="focus" data-placement="bottom" title="Hello, <?php echo $name; ?>!">
-
-				<?php if(count($notifs_content_unseen) == 0) {?>
-					<span class="badge badge-light" style="position: absolute !important; right:2px; cursor: pointer;" tabindex="50" data-toggle="popover-notifs" data-trigger="focus" data-placement="bottom" title="Notifications"><span id="span-num">0</span></span>    
-				<?php } else { ?>
-					<span class="badge badge-danger" style="position: absolute !important; right:2px; cursor: pointer;" tabindex="50" data-toggle="popover-notifs" data-trigger="focus" data-placement="bottom" title="Notifications"><span id="span-num"><?php echo count($notifs_content_unseen) ?></span></span>   
-				<?php } ?>  
-			</div>
-		</div>
-	</nav>
 
 
 	<!-- HIDDEN INPUTS  -->
@@ -129,7 +44,7 @@ while ($row = mysqli_fetch_assoc($res)) {
 					}
 					?>
 					<a href="users.php" class="back-icon"><i class="fas fa-arrow-left"></i></a>
-					<img src="<?php echo $row['profile_photo']; ?>" alt="">
+					<img src="<?= profile_photo($row['profile_photo'],$row['gender']) ; ?>" alt="">
 					<div class="details">
 						<span><?php echo $row['name']; ?></span>
 						<p><?php echo $row['active']; ?></p>

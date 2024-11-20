@@ -1,5 +1,17 @@
 <?php 
     session_start();
+    function profile_photo($profile_photo,$gender)
+    {
+        if (empty($profile_photo) || !is_file($profile_photo)) {
+            if ($gender == "M") {
+                $profile_photo  = "./public/assets/dummy-profile-image-male.jpg";
+            }else{
+                $profile_photo  = "./public/assets/dummy-profile-image-female.jpg";
+            }
+        }
+
+        return $profile_photo;
+    }
     if(isset($_SESSION['unique_id'])){
         include_once "../connection.php";
         $outgoing_id = $_SESSION['unique_id'];
@@ -11,10 +23,11 @@
 
         $query = mysqli_query($con, $sql);
         
-        $sql1 = "SELECT profile_photo from usertable, userprofile where usertable.uid=userprofile.uid and usertable.unique_id = {$incoming_id}";
+        $sql1 = "SELECT gender,profile_photo from usertable, userprofile where usertable.uid=userprofile.uid and usertable.unique_id = {$incoming_id}";
         $query1 = mysqli_query($con, $sql1);
         while($row1 = mysqli_fetch_assoc($query1)){
-            $prof_pic = $row1['profile_photo'];
+
+            $prof_pic = profile_photo($row1['profile_photo'],$row1['gender']);
         }
 
         if(mysqli_num_rows($query) > 0){

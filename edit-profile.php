@@ -54,7 +54,7 @@ $data_jurusan 	= $data_jurusan_temp;
 			<div class="col-md-6 col-12">
 				<div class="form-group">
 					<label for="name">Full Name*</label>
-					<input type="text" id="name" class="form-control" placeholder="First name" name="name" value="<?= $data_profile['name'] ?>" required />
+					<input type="text" id="name" class="form-control" placeholder="First name" name="name" value="<?= !empty($data_profile['name']) ? $data_profile['name'] : "" ?>" required />
 				</div>
 			</div>
 			<div class="col-md-3 col-sm-6 col-12">
@@ -67,22 +67,22 @@ $data_jurusan 	= $data_jurusan_temp;
 				<div class="form-group">
 					<label for="gender">Jenis Kelamin*</label>
 					<select class="form-control" id="gender" name="gender" required="">
-						<option <?php if($data_profile['gender'] != "M" && $data_profile['gender'] != "F") {  ?> selected <?php } ?>>Select your gender</option>
-						<option value="M" <?php if($data_profile['gender'] == "M") {  ?> selected <?php } ?>>Laki-laki</option>
-						<option value="F" <?php if($data_profile['gender'] == "F") {  ?> selected <?php } ?>>Perempuan</option>
+						<option <?php if(!empty($data_profile['gender']) && $data_profile['gender'] != "M" && $data_profile['gender'] != "F") {  ?> selected <?php } ?>>Select your gender</option>
+						<option value="M" <?php if(!empty($data_profile['gender']) && $data_profile['gender'] == "M") {  ?> selected <?php } ?>>Laki-laki</option>
+						<option value="F" <?php if(!empty($data_profile['gender']) && $data_profile['gender'] == "F") {  ?> selected <?php } ?>>Perempuan</option>
 					</select>
 				</div>
 			</div>
 			<div class="col-md-3 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="height">Tinggi</label>
-					<input type="text" class="form-control" placeholder="Eg. 170cms or 5'5ft" name="height" value="<?= $data_profile['height'] ?>">
+					<input type="text" class="form-control" placeholder="Eg. 170cms or 5'5ft" name="height" value="<?= !empty($data_profile['height']) ? $data_profile['height'] : "" ?>">
 				</div>
 			</div>
 			<div class="col-md-3 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="weight">Berat</label>
-					<input type="text" class="form-control" placeholder="Eg. 70kgs" name="weight" value="<?= $data_profile['weight'] ?>">
+					<input type="text" class="form-control" placeholder="Eg. 70kgs" name="weight" value="<?= !empty($data_profile['weight']) ? $data_profile['weight'] : "" ?>">
 				</div>
 			</div>
 			<div class="col-md-3 col-sm-6 col-12">
@@ -91,7 +91,7 @@ $data_jurusan 	= $data_jurusan_temp;
 					<select name="asal_provinsi" id="asal_provinsi" class="form-control">
 						<option value="">Pilih</option>
 						<?php foreach ($data_province as $row): ?>
-							<option value="<?= $row["id"] ?>" <?= $row["id"] == $data_profile["province_id"] ? "selected" : ""  ?>><?= $row["name"] ?></option>
+							<option value="<?= $row["id"] ?>" <?= !empty($data_profile["province_id"]) && $row["id"] == $data_profile["province_id"] ? "selected" : ""  ?>><?= $row["name"] ?></option>
 						<?php endforeach ?>
 					</select>
 				</div>
@@ -107,13 +107,13 @@ $data_jurusan 	= $data_jurusan_temp;
 			<div class="col-md-6 col-12">
 				<div class="form-group">
 					<label for="bio">Bio</label>
-					<textarea class="form-control" id="bio" rows="7" placeholder="..." name="bio"><?= $data_profile['bio'] ?></textarea>
+					<textarea class="form-control" id="bio" rows="7" placeholder="..." name="bio"><?= !empty($data_profile['bio']) ? $data_profile['bio'] : "" ?></textarea>
 				</div>
 			</div>
 			<div class="col-md-6 col-12">
 				<div class="form-group">
 					<label for="alamat">Alamat</label>
-					<textarea class="form-control" id="alamat" rows="3" placeholder="Make it interesting....&#10;Your goal is to impress....." name="alamat"><?= $data_profile['bio'] ?></textarea>
+					<textarea class="form-control" id="alamat" rows="3" placeholder="Make it interesting....&#10;Your goal is to impress....." name="alamat"><?= !empty($data_profile['bio']) ? $data_profile['bio'] : "" ?></textarea>
 				</div>
 			</div>
 		</div>
@@ -127,25 +127,25 @@ $data_jurusan 	= $data_jurusan_temp;
 			<div class="col-md-3 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="ig">Instagram</label>
-					<input type="text" class="form-control" name="ig" value="<?= $data_social['ig'] ?>">
+					<input type="text" class="form-control" name="ig" value="<?= !empty($data_social['ig']) ? $data_social['ig'] : "" ?>">
 				</div>
 			</div>
 			<div class="col-md-3 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="twit">Twitter</label>
-					<input type="text" class="form-control" name="twit" value="<?= $data_social['twit'] ?>">
+					<input type="text" class="form-control" name="twit" value="<?= !empty($data_social['twit']) ? $data_social['twit'] : "" ?>">
 				</div>
 			</div>
 			<div class="col-md-3 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="tiktok">Tiktok</label>
-					<input type="text" class="form-control" name="tiktok" value="<?= $data_social['tiktok'] ?>">
+					<input type="text" class="form-control" name="tiktok" value="<?= !empty($data_social['tiktok']) ? $data_social['tiktok'] : "" ?>">
 				</div>
 			</div>
 			<div class="col-md-3 col-sm-6 col-12">
 				<div class="form-group">
 					<label for="fb">Facebook</label>
-					<input type="text" class="form-control" name="fb" value="<?= $data_social['fb'] ?>">
+					<input type="text" class="form-control" name="fb" value="<?= !empty($data_social['fb']) ? $data_social['fb'] : "" ?>">
 				</div>
 			</div>
 		</div>
@@ -162,7 +162,7 @@ $data_jurusan 	= $data_jurusan_temp;
 					<select name="fakultas" id="fakultas" class="form-control" required="">
 						<option value="">Pilih</option>
 						<?php foreach ($data_fakultas as $row): ?>
-							<option value="<?php echo $row["id"] ?>" <?= $row["id"] == $data_profile["fakultas_id"] ? "selected" : ""  ?>><?php echo $row["name"] ?></option>
+							<option value="<?= $row["id"] ?>" <?= !empty($data_profile["fakultas_id"]) && $row["id"] == $data_profile["fakultas_id"] ? "selected" : ""  ?>><?= $row["name"] ?></option>
 						<?php endforeach ?>
 					</select>
 				</div>
@@ -181,7 +181,7 @@ $data_jurusan 	= $data_jurusan_temp;
 					<select name="tahun_masuk" id="tahun_masuk" class="form-control" required="">
 						<option value="">Pilih Tahun</option>
 						<?php for($i = date("Y");$i >= date("Y") - 7;$i--):?>
-						<option value="<?= $i ?>" <?= $i == $data_profile["tahun_masuk"] ? "selected" : ""  ?>><?= $i ?></option>
+						<option value="<?= $i ?>" <?= !empty($data_profile["tahun_masuk"]) && $i == $data_profile["tahun_masuk"] ? "selected" : ""  ?>><?= $i ?></option>
 						<?php endfor ?>
 					</select>
 				</div>
@@ -189,7 +189,7 @@ $data_jurusan 	= $data_jurusan_temp;
 			<div class="col-md-6 col-sm-12">
 				<div class="form-group">
 					<label for="organisasi">Organisasi</label>
-					<input type="text" class="form-control" name="organisasi" id="organisasi" placeholder="Organisasi yang diikuti" value="<?php echo $data_profile["organisasi"] ?>">
+					<input type="text" class="form-control" name="organisasi" id="organisasi" placeholder="Organisasi yang diikuti" value="<?= !empty($data_profile["organisasi"]) ? $data_profile["organisasi"] : "" ?>">
 				</div>
 			</div>
 		</div>

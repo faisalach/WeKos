@@ -23,22 +23,12 @@ $.ajax({
 		cards = JSON.parse(res);
 		noCards = cards.pop().noCards;
 		if (!noCards) {
-			/*coordsList = cards.pop().coordsList;
-			calcDistance(coordsList.slice(0, -1))
-			.then((distMat) => {
-				distMat.resourceSets[0].resources[0].results.forEach((dist, idx) => {
-					cards[idx]['distance'] = parseFloat(dist.travelDistance).toFixed(2);
-				});
-				loadCards(cards);
-				let script = document.createElement('script');
-				script.setAttribute('src', './js/main.js');
-				document.body.appendChild(script);
-			})
-			.catch((e) => console.error(new Error(e)));*/
 			loadCards(cards);
 			let script = document.createElement('script');
 			script.setAttribute('src', './js/main.js');
 			document.body.appendChild(script);
+		}else{
+			displayCardsOver();
 		}
 	},
 });
@@ -81,7 +71,7 @@ function loadCards(cards) {
 
 function displayCardsOver() {
 	//hide like-dislike buttons
-	document.querySelector('.tinder').style.display = 'none';
+	$('.tinder').hide();
 	//display msg
-	document.querySelector('.cards-over').style.display = 'block !important';
+	$('.cards-over').show();
 }

@@ -1,6 +1,5 @@
 <?php 
-session_start();
-include_once "connection.php";
+include_once "controllerUserData.php";
 ?>
 
 <?php include_once "header.php"; ?>
@@ -35,7 +34,7 @@ include_once "connection.php";
 						$row = mysqli_fetch_assoc($sql);
 					}
 					?>
-					<img src="<?php echo $row['profile_photo']; ?>" alt="">
+					<img src="<?= profile_photo($row['profile_photo'],$row['gender']); ?>" alt="">
 					<div class="details">
 						<span><?php echo ucwords($row['name']) ?></span>
 						<p><?php echo $row1['active']; ?></p>
