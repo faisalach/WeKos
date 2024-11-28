@@ -17,15 +17,15 @@ function consoleLog($x) {
 }
 function profile_photo($profile_photo,$gender)
 {
-    if (empty($profile_photo) || !is_file($profile_photo)) {
-        if ($gender == "M") {
-            $profile_photo  = "./public/assets/dummy-profile-image-male.jpg";
-        }else{
-            $profile_photo  = "./public/assets/dummy-profile-image-female.jpg";
-        }
-    }
+	if (empty($profile_photo) || !is_file($profile_photo)) {
+		if ($gender == "M") {
+			$profile_photo  = "./public/assets/dummy-profile-image-male.jpg";
+		}else{
+			$profile_photo  = "./public/assets/dummy-profile-image-female.jpg";
+		}
+	}
 
-    return $profile_photo;
+	return $profile_photo;
 }
 
 //if user signup button
@@ -217,7 +217,7 @@ if(isset($_POST['check-reset-otp'])){
 	}
 }
 
-    //if user click change password button
+//if user click change password button
 if(isset($_POST['change-password'])){
 	$_SESSION['info'] = "";
 	$password = mysqli_real_escape_string($con, $_POST['password']);
@@ -226,490 +226,511 @@ if(isset($_POST['change-password'])){
 		$errors['password'] = "Confirm password not matched!";
 	}else{
 		$code = 0;
-            $email = $_SESSION['email']; //getting this email using session
-            $encpass = password_hash($password, PASSWORD_BCRYPT);
-            $update_pass = "UPDATE usertable SET code = $code, password = '$encpass' WHERE email = '$email'";
-            $run_query = mysqli_query($con, $update_pass);
-            if($run_query){
-            	$info = "Your password is changed. Now you can login with your new password.";
-            	$_SESSION['info'] = $info;
-            	echo "<script>location.href = 'password-changed.php';</script>";
-            	exit;
-            }else{
-            	$errors['db-error'] = "Failed to change your password!";
-            }
-        }
-    }
-    
-   //if login now button click
-    if(isset($_POST['login-now'])){
-    	echo "<script>location.href = 'login-user.php';</script>";
-    	exit;
-    }
+		//getting this email using session
+		$email = $_SESSION['email']; 
+		$encpass = password_hash($password, PASSWORD_BCRYPT);
+		$update_pass = "UPDATE usertable SET code = $code, password = '$encpass' WHERE email = '$email'";
+		$run_query = mysqli_query($con, $update_pass);
+		if($run_query){
+			$info = "Your password is changed. Now you can login with your new password.";
+			$_SESSION['info'] = $info;
+			echo "<script>location.href = 'password-changed.php';</script>";
+			exit;
+		}else{
+			$errors['db-error'] = "Failed to change your password!";
+		}
+	}
+}
 
-    //if profile form submitted
-    if(isset($_POST['profile-submit'])){
-    	$email = $_SESSION['email'];
-    	$uid = '';
-    	$count = 0;
+//if login now button click
+if(isset($_POST['login-now'])){
+	echo "<script>location.href = 'login-user.php';</script>";
+	exit;
+}
 
-        //fetch the user of current session's uid
-    	$query = "SELECT uid FROM usertable WHERE email = '$email'";
-    	$res = mysqli_query($con, $query);
-    	if(mysqli_num_rows($res) > 0) {
-    		$fetch = mysqli_fetch_assoc($res);
-    		$uid = $fetch['uid'];
-    	}
+//if profile form submitted
+if(isset($_POST['profile-submit'])){
+	$email = $_SESSION['email'];
+	$uid = '';
+	$count = 0;
 
-        //userprofile table
-    	$name = $_POST['fname'] . " " . $_POST['lname'];
-    	$name = mysqli_real_escape_string($con, $name);
-    	$age = mysqli_real_escape_string($con, $_POST['age']);
-    	$gender = mysqli_real_escape_string($con, $_POST['gender']);
-    	$_POST['height'] == "" ? $height = NULL : $height = mysqli_real_escape_string($con, $_POST['height']);  
-    	$_POST['weight'] == "" ? $weight = NULL : $weight = mysqli_real_escape_string($con, $_POST['weight']);     
-    	$lat = mysqli_real_escape_string($con, $_POST['lat']);
-    	$long = mysqli_real_escape_string($con, $_POST['long']);    
-    	$profile_photo = ""; 
-    	$bio = mysqli_real_escape_string($con, $_POST['bio']);
-    	$target_dir = "public/user-profiles/";
-    	$target_file = $target_dir . $_FILES["profile_photo"]["name"];
-    	$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+	//fetch the user of current session's uid
+	$query = "SELECT uid FROM usertable WHERE email = '$email'";
+	$res = mysqli_query($con, $query);
+	if(mysqli_num_rows($res) > 0) {
+		$fetch = mysqli_fetch_assoc($res);
+		$uid = $fetch['uid'];
+	}
+
+	//userprofile table
+	$name = $_POST['fname'] . " " . $_POST['lname'];
+	$name = mysqli_real_escape_string($con, $name);
+	$age = mysqli_real_escape_string($con, $_POST['age']);
+	$gender = mysqli_real_escape_string($con, $_POST['gender']);
+	$_POST['height'] == "" ? $height = NULL : $height = mysqli_real_escape_string($con, $_POST['height']);  
+	$_POST['weight'] == "" ? $weight = NULL : $weight = mysqli_real_escape_string($con, $_POST['weight']);     
+	$lat = mysqli_real_escape_string($con, $_POST['lat']);
+	$long = mysqli_real_escape_string($con, $_POST['long']);    
+	$profile_photo = ""; 
+	$bio = mysqli_real_escape_string($con, $_POST['bio']);
+	$target_dir = "public/user-profiles/";
+	$target_file = $target_dir . $_FILES["profile_photo"]["name"];
+	$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
         //validate file type, must be only image
-    	if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg")
-    		$errors['imageFileType'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-    	else {
-    		move_uploaded_file($_FILES["profile_photo"]["tmp_name"], $root_folder."/public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"]);
-    		$profile_photo = "./public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"];
-    	}
-    	$query = "INSERT INTO userprofile VALUES ('$uid', '$name', '$age', '$gender', '$height', '$weight', '$lat', '$long', '$profile_photo', '$bio')";
-    	$result = mysqli_query($con, $query);
-    	if($result){
-    		consoleLog("userprofile inserted");
-    		$count++;
-    	} else {
-    		consoleLog(mysqli_error($con));
-    		$errors['db-error'] = "Something went wrong with userprofile!";
-    	}
+	if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg")
+		$errors['imageFileType'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+	else {
+		move_uploaded_file($_FILES["profile_photo"]["tmp_name"], $root_folder."/public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"]);
+		$profile_photo = "./public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"];
+	}
+	$query = "INSERT INTO userprofile VALUES ('$uid', '$name', '$age', '$gender', '$height', '$weight', '$lat', '$long', '$profile_photo', '$bio')";
+	$result = mysqli_query($con, $query);
+	if($result){
+		consoleLog("userprofile inserted");
+		$count++;
+	} else {
+		consoleLog(mysqli_error($con));
+		$errors['db-error'] = "Something went wrong with userprofile!";
+	}
 
         //social table
-    	$ig 		= !empty($_POST['ig']) ? mysqli_real_escape_string($con, $_POST['ig']) : "";
-    	$sc 		= !empty($_POST['tiktok']) ? mysqli_real_escape_string($con, $_POST['tiktok']) : "";
-    	$twit 		= !empty($_POST['twit']) ? mysqli_real_escape_string($con, $_POST['twit']) : "";
-    	$fb 		= !empty($_POST['fb']) ? mysqli_real_escape_string($con, $_POST['fb']) : "";
-    	$query 		= "INSERT INTO social VALUES ('$uid', '$ig', '$sc', '$twit', '$fb')";
-    	$result 	= mysqli_query($con, $query);
-    	if($result){
-    		consoleLog("social inserted");
-    		$count++;
-    	} else {
-    		consoleLog(mysqli_error($con));
-    		$errors['db-error'] = "Something went wrong with social!";
-    	}
+	$ig 		= !empty($_POST['ig']) ? mysqli_real_escape_string($con, $_POST['ig']) : "";
+	$sc 		= !empty($_POST['tiktok']) ? mysqli_real_escape_string($con, $_POST['tiktok']) : "";
+	$twit 		= !empty($_POST['twit']) ? mysqli_real_escape_string($con, $_POST['twit']) : "";
+	$fb 		= !empty($_POST['fb']) ? mysqli_real_escape_string($con, $_POST['fb']) : "";
+	$query 		= "INSERT INTO social VALUES ('$uid', '$ig', '$sc', '$twit', '$fb')";
+	$result 	= mysqli_query($con, $query);
+	if($result){
+		consoleLog("social inserted");
+		$count++;
+	} else {
+		consoleLog(mysqli_error($con));
+		$errors['db-error'] = "Something went wrong with social!";
+	}
 
-    	if($count == 4) {
-    		$query = "UPDATE usertable SET profile_created='yes' WHERE uid=$uid";
-    		$result = mysqli_query($con, $query);
-    		if($result) {
-    			consoleLog("Profile successfully created");
-    			$query = "INSERT INTO notification(uid, type, content) VALUES ($uid, 'default', 'Welcome to Wekos!'), ($uid, 'default', 'Browse through recommendations to find your perfect match!')";
-    			$res = mysqli_query($con, $query);
-    			if($res){
-    				consoleLog("Notifs added successfully");
-    			} else {
-    				consoleLog("Notifs error");
-    				consoleLog(mysqli_error($con));
-    			}
-    			$_SESSION['msg_header'] = "Welcome to Wekos";
-    			$_SESSION['msg'] = "Your profile has been created successfully";
-    			echo "<script>location.href = 'index.php';</script>";
-    			exit;
-    		} else {
-    			consoleLog("Error creating profile");
-    			consoleLog(mysqli_error($con));
-    		}
-    	}
-    }
+	if($count == 4) {
+		$query = "UPDATE usertable SET profile_created='yes' WHERE uid=$uid";
+		$result = mysqli_query($con, $query);
+		if($result) {
+			consoleLog("Profile successfully created");
+			$query = "INSERT INTO notification(uid, type, content) VALUES ($uid, 'default', 'Welcome to Wekos!'), ($uid, 'default', 'Browse through recommendations to find your perfect match!')";
+			$res = mysqli_query($con, $query);
+			if($res){
+				consoleLog("Notifs added successfully");
+			} else {
+				consoleLog("Notifs error");
+				consoleLog(mysqli_error($con));
+			}
+			$_SESSION['msg_header'] = "Welcome to Wekos";
+			$_SESSION['msg'] = "Your profile has been created successfully";
+			echo "<script>location.href = 'index.php';</script>";
+			exit;
+		} else {
+			consoleLog("Error creating profile");
+			consoleLog(mysqli_error($con));
+		}
+	}
+}
 
     //profile edit - update profile
-    if(isset($_POST['profile-edit-submit'])) {
-    	$err_count = 0;
-    	$email = $_SESSION['email'];
-    	$uid = "";
-    	$query = "SELECT uid from usertable where email = '$email'";
-    	$run_query = mysqli_query($con, $query);
-    	if($run_query) {
-    		$fetch = mysqli_fetch_assoc($run_query);
-    		$uid = $fetch['uid'];
-    	}
+if(isset($_POST['profile-edit-submit'])) {
+	$err_count = 0;
+	$email = $_SESSION['email'];
+	$uid = "";
+	$query = "SELECT uid from usertable where email = '$email'";
+	$run_query = mysqli_query($con, $query);
+	if($run_query) {
+		$fetch = mysqli_fetch_assoc($run_query);
+		$uid = $fetch['uid'];
+	}
         //update userprofile    	
-    	$name 			= mysqli_real_escape_string($con, $_POST['name']);
-    	$birth_date		= mysqli_real_escape_string($con, $_POST['tgl_lahir']);
-    	$gender 		= mysqli_real_escape_string($con, $_POST['gender']);
-    	$height 		= mysqli_real_escape_string($con, $_POST['height']);
-    	$weight 		= mysqli_real_escape_string($con, $_POST['weight']);
-    	$province_id	= mysqli_real_escape_string($con, $_POST['asal_provinsi']);
-    	$regencies_id	= mysqli_real_escape_string($con, $_POST['asal_kota']);
-    	$address 		= mysqli_real_escape_string($con, $_POST['alamat']);
-    	$bio 			= mysqli_real_escape_string($con, $_POST['bio']);
-    	$fakultas_id	= mysqli_real_escape_string($con, $_POST['fakultas']);
-    	$jurusan_id		= mysqli_real_escape_string($con, $_POST['jurusan']);
-    	$tahun_masuk	= mysqli_real_escape_string($con, $_POST['tahun_masuk']);
-    	$organisasi		= mysqli_real_escape_string($con, $_POST['organisasi']);
-    	
-    	$profile_photo 	= ""; 
-    	$target_dir 	= "public/user-profiles/";
-    	$target_file 	= $target_dir . $_FILES["profile_photo"]["name"];
-    	$imageFileType 	= strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-        //validate file type, must be only image
-    	if(!file_exists($_FILES['profile_photo']['tmp_name']) || !is_uploaded_file($_FILES['profile_photo']['tmp_name'])) {
+	$name 			= mysqli_real_escape_string($con, $_POST['name']);
+	$birth_date		= mysqli_real_escape_string($con, $_POST['tgl_lahir']);
+	$gender 		= mysqli_real_escape_string($con, $_POST['gender']);
+	$height 		= mysqli_real_escape_string($con, $_POST['height']);
+	$weight 		= mysqli_real_escape_string($con, $_POST['weight']);
+	$province_id	= mysqli_real_escape_string($con, $_POST['asal_provinsi']);
+	$regencies_id	= mysqli_real_escape_string($con, $_POST['asal_kota']);
+	$suku			= mysqli_real_escape_string($con, $_POST['suku']);
+	$agama			= mysqli_real_escape_string($con, $_POST['agama']);
+	$perokok		= mysqli_real_escape_string($con, $_POST['perokok']);
+	$hobi			= mysqli_real_escape_string($con, $_POST['hobi']);
+	$address		= mysqli_real_escape_string($con, $_POST['alamat']);
+	$bio 			= mysqli_real_escape_string($con, $_POST['bio']);
+	$fakultas_id	= mysqli_real_escape_string($con, $_POST['fakultas']);
+	$jurusan_id		= mysqli_real_escape_string($con, $_POST['jurusan']);
+	$tahun_masuk	= mysqli_real_escape_string($con, $_POST['tahun_masuk']);
+	$organisasi		= mysqli_real_escape_string($con, $_POST['organisasi']);
 
-    		$query  = "SELECT uid FROM userprofile WHERE uid = '$uid'";
-    		$result     = mysqli_query($con,$query);
-    		if (mysqli_num_rows($result) > 0) {
-    			$query = "UPDATE userprofile SET 
-    			name='$name',
-    			birth_date='$birth_date',
-    			gender='$gender',
-    			height='$height',
-    			weight='$weight',
-    			province_id='$province_id',
-    			regencies_id='$regencies_id',
-    			address='$address',
-    			bio='$bio',
-    			fakultas_id='$fakultas_id',
-    			jurusan_id='$jurusan_id',
-    			tahun_masuk='$tahun_masuk',
-    			organisasi='$organisasi'
-    			WHERE uid = '$uid'";
-    		}else{
-    			$query = "INSERT INTO userprofile SET
-    			uid='$uid',
-    			name='$name',
-    			birth_date='$birth_date',
-    			gender='$gender',
-    			height='$height',
-    			weight='$weight',
-    			province_id='$province_id',
-    			regencies_id='$regencies_id',
-    			address='$address',
-    			bio='$bio',
-    			fakultas_id='$fakultas_id',
-    			jurusan_id='$jurusan_id',
-    			tahun_masuk='$tahun_masuk',
-    			organisasi='$organisasi'";
-    		}
-    	} else {
-    		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"){
-    			$errors['imageFileType'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-    		}else {
-    			move_uploaded_file($_FILES["profile_photo"]["tmp_name"], $root_folder."/public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"]);
-    			$profile_photo = "./public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"];
+	$profile_photo 	= ""; 
+	$target_dir 	= "public/user-profiles/";
+	$target_file 	= $target_dir . $_FILES["profile_photo"]["name"];
+	$imageFileType 	= strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+        //validate file type, must be only image
+	if(!file_exists($_FILES['profile_photo']['tmp_name']) || !is_uploaded_file($_FILES['profile_photo']['tmp_name'])) {
+
+		$query  = "SELECT uid FROM userprofile WHERE uid = '$uid'";
+		$result     = mysqli_query($con,$query);
+		if (mysqli_num_rows($result) > 0) {
+			$query = "UPDATE userprofile SET 
+			name='$name',
+			birth_date='$birth_date',
+			gender='$gender',
+			height='$height',
+			weight='$weight',
+			province_id='$province_id',
+			regencies_id='$regencies_id',
+			suku='$suku',
+			agama='$agama',
+			perokok='$perokok',
+			hobi='$hobi',
+			address='$address',
+			bio='$bio',
+			fakultas_id='$fakultas_id',
+			jurusan_id='$jurusan_id',
+			tahun_masuk='$tahun_masuk',
+			organisasi='$organisasi'
+			WHERE uid = '$uid'";
+		}else{
+			$query = "INSERT INTO userprofile SET
+			uid='$uid',
+			name='$name',
+			birth_date='$birth_date',
+			gender='$gender',
+			height='$height',
+			weight='$weight',
+			province_id='$province_id',
+			regencies_id='$regencies_id',
+			suku='$suku',
+			agama='$agama',
+			perokok='$perokok',
+			hobi='$hobi',
+			address='$address',
+			bio='$bio',
+			fakultas_id='$fakultas_id',
+			jurusan_id='$jurusan_id',
+			tahun_masuk='$tahun_masuk',
+			organisasi='$organisasi'";
+		}
+	} else {
+		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"){
+			$errors['imageFileType'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+		}else {
+			move_uploaded_file($_FILES["profile_photo"]["tmp_name"], $root_folder."/public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"]);
+			$profile_photo = "./public/user-profiles/user-" . $uid . "-" . $_FILES["profile_photo"]["name"];
                 //get old photo url
-    			$query 	= "SELECT profile_photo FROM userprofile WHERE uid='$uid'";
-    			$res 	= mysqli_query($con, $query);
-    			$fetch 	= mysqli_fetch_assoc($res);
-    			$old 	= $fetch['profile_photo'];
-    			$url 	= $root_folder . substr($old, 1);
+			$query 	= "SELECT profile_photo FROM userprofile WHERE uid='$uid'";
+			$res 	= mysqli_query($con, $query);
+			$fetch 	= mysqli_fetch_assoc($res);
+			$old 	= $fetch['profile_photo'];
+			$url 	= $root_folder . substr($old, 1);
                 // if($old != $profile_photo) unlink(realpath($url));
 
-    			$query  = "SELECT uid FROM userprofile WHERE uid = '$uid'";
-    			$result     = mysqli_query($con,$query);
-    			if (mysqli_num_rows($result) > 0) {
-    				$query = "UPDATE userprofile SET 
-    				profile_photo='$profile_photo',
-    				name='$name',
-    				birth_date='$birth_date',
-    				gender='$gender',
-    				height='$height',
-    				weight='$weight',
-    				province_id='$province_id',
-    				regencies_id='$regencies_id',
-    				address='$address',
-    				bio='$bio',
-    				fakultas_id='$fakultas_id',
-    				jurusan_id='$jurusan_id',
-    				tahun_masuk='$tahun_masuk',
-    				organisasi='$organisasi'
-    				WHERE uid = '$uid'";
-    			}else{
-    				$query = "INSERT INTO userprofile SET
-    				uid='$uid',
-    				profile_photo='$profile_photo',
-    				name='$name',
-    				birth_date='$birth_date',
-    				gender='$gender',
-    				height='$height',
-    				weight='$weight',
-    				province_id='$province_id',
-    				regencies_id='$regencies_id',
-    				address='$address',
-    				bio='$bio',
-    				fakultas_id='$fakultas_id',
-    				jurusan_id='$jurusan_id',
-    				tahun_masuk='$tahun_masuk',
-    				organisasi='$organisasi'";
-    			}
+			$query  = "SELECT uid FROM userprofile WHERE uid = '$uid'";
+			$result     = mysqli_query($con,$query);
+			if (mysqli_num_rows($result) > 0) {
+				$query = "UPDATE userprofile SET 
+				profile_photo='$profile_photo',
+				name='$name',
+				birth_date='$birth_date',
+				gender='$gender',
+				height='$height',
+				weight='$weight',
+				province_id='$province_id',
+				regencies_id='$regencies_id',
+				suku='$suku',
+				agama='$agama',
+				perokok='$perokok',
+				hobi='$hobi',
+				address='$address',
+				bio='$bio',
+				fakultas_id='$fakultas_id',
+				jurusan_id='$jurusan_id',
+				tahun_masuk='$tahun_masuk',
+				organisasi='$organisasi'
+				WHERE uid = '$uid'";
+			}else{
+				$query = "INSERT INTO userprofile SET
+				uid='$uid',
+				profile_photo='$profile_photo',
+				name='$name',
+				birth_date='$birth_date',
+				gender='$gender',
+				height='$height',
+				weight='$weight',
+				province_id='$province_id',
+				regencies_id='$regencies_id',
+				suku='$suku',
+				agama='$agama',
+				perokok='$perokok',
+				hobi='$hobi',
+				address='$address',
+				bio='$bio',
+				fakultas_id='$fakultas_id',
+				jurusan_id='$jurusan_id',
+				tahun_masuk='$tahun_masuk',
+				organisasi='$organisasi'";
+			}
 
-    			
-    		}
-    	}
 
-    	$result = mysqli_query($con, $query);
-    	if($result){
-    		consoleLog("userprofile updated");
-    	} else {
-    		consoleLog(mysqli_error($con));
-    		$err_count++;
-    	}
+		}
+	}
+
+	$result = mysqli_query($con, $query);
+	if($result){
+		consoleLog("userprofile updated");
+	} else {
+		consoleLog(mysqli_error($con));
+		$err_count++;
+	}
 
         //update social
-    	$ig 	= mysqli_real_escape_string($con, $_POST['ig']);
-    	$tiktok	= mysqli_real_escape_string($con, $_POST['tiktok']);
-    	$twit 	= mysqli_real_escape_string($con, $_POST['twit']);
-    	$fb 	= mysqli_real_escape_string($con, $_POST['fb']);
+	$ig 	= mysqli_real_escape_string($con, $_POST['ig']);
+	$tiktok	= mysqli_real_escape_string($con, $_POST['tiktok']);
+	$twit 	= mysqli_real_escape_string($con, $_POST['twit']);
+	$fb 	= mysqli_real_escape_string($con, $_POST['fb']);
 
-    	$query  = "SELECT uid FROM social WHERE uid = '$uid'";
-    	$result     = mysqli_query($con,$query);
-    	if (mysqli_num_rows($result) > 0) {
-	    	$query 	= "UPDATE social SET 
-	    	ig='$ig',
-	    	tiktok='$tiktok',
-	    	twit='$twit',
-	    	fb='$fb' 
-	    	WHERE uid = '$uid'";
-    	}else{
-    		$query 	= "INSERT INTO social SET 
-    		uid = '$uid',
-    		ig='$ig',
-    		tiktok='$tiktok',
-    		twit='$twit',
-    		fb='$fb' ";
-    	}
-    	$result = mysqli_query($con, $query);
+	$query  = "SELECT uid FROM social WHERE uid = '$uid'";
+	$result     = mysqli_query($con,$query);
+	if (mysqli_num_rows($result) > 0) {
+		$query 	= "UPDATE social SET 
+		ig='$ig',
+		tiktok='$tiktok',
+		twit='$twit',
+		fb='$fb' 
+		WHERE uid = '$uid'";
+	}else{
+		$query 	= "INSERT INTO social SET 
+		uid = '$uid',
+		ig='$ig',
+		tiktok='$tiktok',
+		twit='$twit',
+		fb='$fb' ";
+	}
+	$result = mysqli_query($con, $query);
 
-    	if($result){
-    		consoleLog("social updated");
-    	} else {
-    		consoleLog(mysqli_error($con));
-    		$err_count++;
-    	}
+	if($result){
+		consoleLog("social updated");
+	} else {
+		consoleLog(mysqli_error($con));
+		$err_count++;
+	}
 
 
-    	if($err_count == 0) {
-    		$query = "SELECT profile_created FROM usertable WHERE uid=$uid";
-    		$result = mysqli_query($con, $query);
-    		$check  = mysqli_fetch_assoc($result);
-    		if($check["profile_created"] != 'yes') {
-    			$query = "UPDATE usertable SET profile_created='yes' WHERE uid=$uid";
-    			$result = mysqli_query($con, $query);
-    			if($result) {
-    				consoleLog("Profile successfully created");
-    				$query = "INSERT INTO notification(uid, type, content) VALUES ($uid, 'default', 'Welcome to Wekos!'), ($uid, 'default', 'Browse through recommendations to find your perfect match!')";
-    				$res = mysqli_query($con, $query);
-    				if($res){
-    					consoleLog("Notifs added successfully");
-    				} else {
-    					consoleLog("Notifs error");
-    					consoleLog(mysqli_error($con));
-    				}
-    				$_SESSION['msg_header'] = "Welcome to Wekos";
-    				$_SESSION['msg'] = "Your profile has been created successfully";
-    				echo "<script>location.href = 'index.php';</script>";
-    				exit;
-    			} else {
-    				consoleLog("Error creating profile");
-    				consoleLog(mysqli_error($con));
-    			}
-    		}
+	if($err_count == 0) {
+		$query = "SELECT profile_created FROM usertable WHERE uid=$uid";
+		$result = mysqli_query($con, $query);
+		$check  = mysqli_fetch_assoc($result);
+		if($check["profile_created"] != 'yes') {
+			$query = "UPDATE usertable SET profile_created='yes' WHERE uid=$uid";
+			$result = mysqli_query($con, $query);
+			if($result) {
+				consoleLog("Profile successfully created");
+				$query = "INSERT INTO notification(uid, type, content) VALUES ($uid, 'default', 'Welcome to Wekos!'), ($uid, 'default', 'Browse through recommendations to find your perfect match!')";
+				$res = mysqli_query($con, $query);
+				if($res){
+					consoleLog("Notifs added successfully");
+				} else {
+					consoleLog("Notifs error");
+					consoleLog(mysqli_error($con));
+				}
+				$_SESSION['msg_header'] = "Welcome to Wekos";
+				$_SESSION['msg'] = "Your profile has been created successfully";
+				echo "<script>location.href = 'index.php';</script>";
+				exit;
+			} else {
+				consoleLog("Error creating profile");
+				consoleLog(mysqli_error($con));
+			}
+		}
 
-    		$_SESSION['msg_header'] = "Profile Update";
-    		$_SESSION['msg'] = "Your profile has been updated successfully";
-    		echo "<script>location.href = 'index.php';</script>";
-    		exit;
-    	}
-    }
+		$_SESSION['msg_header'] = "Profile Update";
+		$_SESSION['msg'] = "Your profile has been updated successfully";
+		echo "<script>location.href = 'index.php';</script>";
+		exit;
+	}
+}
 
     //delete profile
-    if(isset($_POST['delete-profile'])) { 
-    	$err_count = 0;
-    	$email = $_SESSION['email'];
-    	$uid = "";
-    	$unique_id = "";
-    	$query = "SELECT uid, unique_id from usertable where email = '$email'";
-    	$run_query = mysqli_query($con, $query);
-    	if($run_query) {
-    		$fetch = mysqli_fetch_assoc($run_query);
-    		$uid = $fetch['uid'];
-    		$unique_id = $fetch['unique_id'];
-    	}
+if(isset($_POST['delete-profile'])) { 
+	$err_count = 0;
+	$email = $_SESSION['email'];
+	$uid = "";
+	$unique_id = "";
+	$query = "SELECT uid, unique_id from usertable where email = '$email'";
+	$run_query = mysqli_query($con, $query);
+	if($run_query) {
+		$fetch = mysqli_fetch_assoc($run_query);
+		$uid = $fetch['uid'];
+		$unique_id = $fetch['unique_id'];
+	}
         //1 delete from usertable
-    	$query = "DELETE FROM usertable WHERE uid = '$uid'";
-    	$run_query = mysqli_query($con, $query);
-    	if($run_query) {
-    		consoleLog("Deleted from USERTABLE");
-    	} else {
-    		consoleLog("USERTABLE delete error");
-    		consoleLog(mysqli_error($con));
-    		$err_count++;
-    	}
+	$query = "DELETE FROM usertable WHERE uid = '$uid'";
+	$run_query = mysqli_query($con, $query);
+	if($run_query) {
+		consoleLog("Deleted from USERTABLE");
+	} else {
+		consoleLog("USERTABLE delete error");
+		consoleLog(mysqli_error($con));
+		$err_count++;
+	}
         //2 delete from userprofile
-    	$query = "DELETE FROM userprofile WHERE uid = '$uid'";
-    	$run_query = mysqli_query($con, $query);
-    	if($run_query) {
-    		consoleLog("Deleted from USERPROFILE");
-    	} else {
-    		consoleLog("USERPROFILE delete error");
-    		consoleLog(mysqli_error($con));
-    		$err_count++;
-    	}
+	$query = "DELETE FROM userprofile WHERE uid = '$uid'";
+	$run_query = mysqli_query($con, $query);
+	if($run_query) {
+		consoleLog("Deleted from USERPROFILE");
+	} else {
+		consoleLog("USERPROFILE delete error");
+		consoleLog(mysqli_error($con));
+		$err_count++;
+	}
         //3 delete from social
-    	$query = "DELETE FROM social WHERE uid = '$uid'";
-    	$run_query = mysqli_query($con, $query);
-    	if($run_query) {
-    		consoleLog("Deleted from SOCIAL");
-    	} else {
-    		consoleLog("SOCIAL delete error");
-    		consoleLog(mysqli_error($con));
-    		$err_count++;
-    	}
+	$query = "DELETE FROM social WHERE uid = '$uid'";
+	$run_query = mysqli_query($con, $query);
+	if($run_query) {
+		consoleLog("Deleted from SOCIAL");
+	} else {
+		consoleLog("SOCIAL delete error");
+		consoleLog(mysqli_error($con));
+		$err_count++;
+	}
         //4 delete from career
-    	$query = "DELETE FROM career WHERE uid = '$uid'";
-    	$run_query = mysqli_query($con, $query);
-    	if($run_query) {
-    		consoleLog("Deleted from CAREER");
-    	} else {
-    		consoleLog("CAREER delete error");
-    		consoleLog(mysqli_error($con));
-    		$err_count++;
-    	}
+	$query = "DELETE FROM career WHERE uid = '$uid'";
+	$run_query = mysqli_query($con, $query);
+	if($run_query) {
+		consoleLog("Deleted from CAREER");
+	} else {
+		consoleLog("CAREER delete error");
+		consoleLog(mysqli_error($con));
+		$err_count++;
+	}
         //5 delete from hobbies
-    	$query = "DELETE FROM hobbies WHERE uid = '$uid'";
-    	$run_query = mysqli_query($con, $query);
-    	if($run_query) {
-    		consoleLog("Deleted from HOBBIES");
-    	} else {
-    		consoleLog("HOBBIES delete error");
-    		consoleLog(mysqli_error($con));
-    		$err_count++;
-    	}
+	$query = "DELETE FROM hobbies WHERE uid = '$uid'";
+	$run_query = mysqli_query($con, $query);
+	if($run_query) {
+		consoleLog("Deleted from HOBBIES");
+	} else {
+		consoleLog("HOBBIES delete error");
+		consoleLog(mysqli_error($con));
+		$err_count++;
+	}
         //6 delete from notifications
-    	$query = "DELETE FROM notification WHERE uid = '$uid'";
-    	$run_query = mysqli_query($con, $query);
-    	if($run_query) {
-    		consoleLog("Deleted from NOTIFICATION");
-    	} else {
-    		consoleLog("NOTIFICATION delete error");
-    		consoleLog(mysqli_error($con));
-    		$err_count++;
-    	}
+	$query = "DELETE FROM notification WHERE uid = '$uid'";
+	$run_query = mysqli_query($con, $query);
+	if($run_query) {
+		consoleLog("Deleted from NOTIFICATION");
+	} else {
+		consoleLog("NOTIFICATION delete error");
+		consoleLog(mysqli_error($con));
+		$err_count++;
+	}
         //6 delete from match
-    	$query = "DELETE FROM `match` WHERE uid1 = '$uid' OR uid2 = '$uid'";
-    	$run_query = mysqli_query($con, $query);
-    	if($run_query) {
-    		consoleLog("Deleted from MATCH");
-    	} else {
-    		consoleLog("MATCH delete error");
-    		consoleLog(mysqli_error($con));
-    		$err_count++;
-    	}
+	$query = "DELETE FROM `match` WHERE uid1 = '$uid' OR uid2 = '$uid'";
+	$run_query = mysqli_query($con, $query);
+	if($run_query) {
+		consoleLog("Deleted from MATCH");
+	} else {
+		consoleLog("MATCH delete error");
+		consoleLog(mysqli_error($con));
+		$err_count++;
+	}
         //7 delete from messages
-    	$query = "DELETE FROM `messages` WHERE incoming_msg_id = '$unique_id' OR outgoing_msg_id = '$unique_id'";
-    	$run_query = mysqli_query($con, $query);
-    	if($run_query) {
-    		consoleLog("Deleted from MESSAGES");
-    	} else {
-    		consoleLog("MESSAGES delete error");
-    		consoleLog(mysqli_error($con));
-    		$err_count++;
-    	}
+	$query = "DELETE FROM `messages` WHERE incoming_msg_id = '$unique_id' OR outgoing_msg_id = '$unique_id'";
+	$run_query = mysqli_query($con, $query);
+	if($run_query) {
+		consoleLog("Deleted from MESSAGES");
+	} else {
+		consoleLog("MESSAGES delete error");
+		consoleLog(mysqli_error($con));
+		$err_count++;
+	}
 
-    	if($err_count == 0) {
-    		consoleLog("PROFILE DELETED");
-    		session_start();
-    		session_unset();
-    		session_destroy();
-    		echo "<script>location.href = 'signup-user.php';</script>";
-    		exit;
-    	}
-    }
+	if($err_count == 0) {
+		consoleLog("PROFILE DELETED");
+		session_start();
+		session_unset();
+		session_destroy();
+		echo "<script>location.href = 'signup-user.php';</script>";
+		exit;
+	}
+}
 
     //when user sees notifications set as seen
-    if(isset($_POST['seen_by_user'])) {
-    	$uid = $_POST['uid'];
-    	$query = "UPDATE notification SET seen_by_user='yes' where uid='$uid'";
-    	$res = mysqli_query($con, $query);
-    	if($res) {
-    		echo "Updated seen by user";
-    	} else {
-    		echo mysqli_error($con);
-    	}        
-    }
+if(isset($_POST['seen_by_user'])) {
+	$uid = $_POST['uid'];
+	$query = "UPDATE notification SET seen_by_user='yes' where uid='$uid'";
+	$res = mysqli_query($con, $query);
+	if($res) {
+		echo "Updated seen by user";
+	} else {
+		echo mysqli_error($con);
+	}        
+}
 
     //fetch all cards
-    if(isset($_POST['get_cards'])) {
-    	$uid 		= $_POST['uid1'];
-    	$cards 		= Array();
-    	$coordsList = "";
-    	$noCards 	= true;
+if(isset($_POST['get_cards'])) {
+	$uid 		= $_POST['uid1'];
+	$cards 		= Array();
+	$coordsList = "";
+	$noCards 	= true;
         //get gender of current user
-    	$query 		= "SELECT gender FROM userprofile WHERE uid='$uid'";
-    	$res 		= mysqli_query($con, $query);
-    	$gender 	= mysqli_fetch_assoc($res)['gender'];
+	$query 		= "SELECT gender FROM userprofile WHERE uid='$uid'";
+	$res 		= mysqli_query($con, $query);
+	$gender 	= mysqli_fetch_assoc($res)['gender'];
         //fetch all cards of opposite gender
 
-    	$query 		= "SELECT t1.*,t2.name as nama_jurusan FROM userprofile t1 
-    	LEFT JOIN jurusan t2 ON t2.id = t1.jurusan_id
-    	WHERE t1.gender = '$gender' AND t1.uid != '$uid'";
-    	$res 		= mysqli_query($con, $query);
-    	while ($row = mysqli_fetch_assoc($res)) {
-    		$showCard = true;
-    		$uid2 	= $row['uid'];
-    		$query 	= "SELECT * FROM `match` WHERE uid1 in ('$uid', '$uid2') AND uid2 in ('$uid', '$uid2')";
-    		$user_res = mysqli_query($con, $query);
+	$query 		= "SELECT t1.*,t2.name as nama_jurusan FROM userprofile t1 
+	LEFT JOIN jurusan t2 ON t2.id = t1.jurusan_id
+	WHERE t1.gender = '$gender' AND t1.uid != '$uid'";
+	$res 		= mysqli_query($con, $query);
+	while ($row = mysqli_fetch_assoc($res)) {
+		$showCard = true;
+		$uid2 	= $row['uid'];
+		$query 	= "SELECT * FROM `match` WHERE uid1 in ('$uid', '$uid2') AND uid2 in ('$uid', '$uid2')";
+		$user_res = mysqli_query($con, $query);
 
             //don't show user if already matched or if blocked
-    		if(mysqli_num_rows($user_res) == 1) {
-    			$fetch = mysqli_fetch_assoc($user_res);
-    			if($fetch['status'] == 'match' || $fetch['status'] == 'blocked') $showCard = false;
-    			if($fetch['first_liked_by'] == $uid) $showCard = false;
-    		}
+		if(mysqli_num_rows($user_res) == 1) {
+			$fetch = mysqli_fetch_assoc($user_res);
+			if($fetch['status'] == 'match' || $fetch['status'] == 'blocked') $showCard = false;
+			if($fetch['first_liked_by'] == $uid) $showCard = false;
+		}
 
-    		if($showCard) {
-    			$noCards		= false;
-    			$id 			= $row['uid'];
-    			$name 			= ucwords($row['name']);
-    			$tanggal_lahir 	= new DateTime($row["birth_date"]);
-    			$sekarang 		= new DateTime("today");
-    			$age 			= $sekarang->diff($tanggal_lahir)->y;
-    			$gender			= $row['gender'];
-    			$jurusan		= $row['nama_jurusan'];
-    			$bio 			= nl2br($row['bio']);
-    			$profile_photo	= profile_photo($row['profile_photo'],$gender);
-                
-                $card = Array(
-    				"uid" => $id,
-    				"name" => $name,
-    				"age" => $age,
-    				"gender" => $gender,
-    				"profile_photo" => $profile_photo,
-    				"jurusan" => $jurusan,
-    				"bio" => $bio
-    			);
-    			array_push($cards, $card);
-    		}
-    	}
-    	if(count($cards) == 0) $noCards = true;
-    	array_push($cards, Array("noCards" => $noCards));
-    	echo json_encode($cards);
-    }
+		if($showCard) {
+			$noCards		= false;
+			$id 			= $row['uid'];
+			$name 			= ucwords($row['name']);
+			$tanggal_lahir 	= new DateTime($row["birth_date"]);
+			$sekarang 		= new DateTime("today");
+			$age 			= $sekarang->diff($tanggal_lahir)->y;
+			$gender			= $row['gender'];
+			$jurusan		= $row['nama_jurusan'];
+			$bio 			= nl2br($row['bio']);
+			$profile_photo	= profile_photo($row['profile_photo'],$gender);
+
+			$card = Array(
+				"uid" => $id,
+				"name" => $name,
+				"age" => $age,
+				"gender" => $gender,
+				"profile_photo" => $profile_photo,
+				"jurusan" => $jurusan,
+				"bio" => $bio
+			);
+			array_push($cards, $card);
+		}
+	}
+	if(count($cards) == 0) $noCards = true;
+	array_push($cards, Array("noCards" => $noCards));
+	echo json_encode($cards);
+}
 
     //check if match, save in match table
-    if(isset($_POST['data-uid'])) {
-    	$uid1 = $_POST['uid1'];
-    	$uid1_name = $_POST['uid1-name'];
-    	$uid2_name = $_POST['uid2-name'];
-    	$uid2 = $_POST['data-uid'];
+if(isset($_POST['data-uid'])) {
+	$uid1 = $_POST['uid1'];
+	$uid1_name = $_POST['uid1-name'];
+	$uid2_name = $_POST['uid2-name'];
+	$uid2 = $_POST['data-uid'];
         $choice = $_POST['choice']; //whether pending or block
         $jsonData = Array();
         $query = "SELECT * FROM `match` WHERE uid1 in ('$uid1', '$uid2') AND uid2 in ('$uid1', '$uid2')";
@@ -776,9 +797,9 @@ if(isset($_POST['change-password'])){
     	LEFT JOIN social ON social.uid=userprofile.uid
     	WHERE userprofile.uid = $uid";
     	$query = mysqli_query($con, $query);
-        $res    = mysqli_fetch_assoc($query);
+    	$res    = mysqli_fetch_assoc($query);
 
-        $res["profile_photo"]   = profile_photo($res["profile_photo"],$res["gender"]);
+    	$res["profile_photo"]   = profile_photo($res["profile_photo"],$res["gender"]);
 
     	echo json_encode($res);
     }

@@ -82,6 +82,22 @@
 							<p id="asal_kota_2"></p>
 						</div>
 						<div class="form-group">
+							<label for="" class="font-weight-bold">Suku</label>
+							<p id="suku"></p>
+						</div>
+						<div class="form-group">
+							<label for="" class="font-weight-bold">Agama</label>
+							<p id="agama"></p>
+						</div>
+						<div class="form-group">
+							<label for="" class="font-weight-bold">Hobi</label>
+							<p id="hobi"></p>
+						</div>
+						<div class="form-group">
+							<label for="" class="font-weight-bold">Perokok</label>
+							<p id="perokok"></p>
+						</div>
+						<div class="form-group">
 							<label for="" class="font-weight-bold">Jurusan</label>
 							<p id="jurusan_2"></p>
 						</div>
@@ -135,6 +151,11 @@
 						$("#asal_kota").html(data.nama_kota);
 						$("#jurusan").html(data.nama_jurusan);
 						$("#birth_date").html(data.birth_date);
+						$("#suku").html(data.suku);
+						$("#agama").html(data.agama);
+						$("#hobi").html(data.hobi);
+						$("#perokok").html(data.perokok == "1" ? "Ya" : "Tidak");
+
 						$("#height_weight").html(data.height + " cm / "+data.weight+" kg");
 						$("#organisasi").html((data.organisasi != "" ? data.organisasi : "-"));
 						$("#tiktok").html(data.tiktok != "" ? data.tiktok : "-");

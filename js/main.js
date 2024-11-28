@@ -47,7 +47,7 @@ allCards.forEach(function(el) {
 		}else{
 			$(love).click();
 		}
-		/*
+		
 		el.classList.remove('moving');
 		tinderContainer.classList.remove('tinder_love');
 		tinderContainer.classList.remove('tinder_nope');
@@ -73,7 +73,7 @@ allCards.forEach(function(el) {
 				'translate(' + toX + 'px, ' + (toY + event.deltaY) + 'px) rotate(' + rotate + 'deg)';
 			initCards();
 
-		}*/
+		}
 	});
 });
 

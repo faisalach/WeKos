@@ -104,6 +104,43 @@ $data_jurusan 	= $data_jurusan_temp;
 					</select>
 				</div>
 			</div>
+			<div class="col-md-3 col-sm-6 col-12">
+				<div class="form-group">
+					<label for="suku">Suku</label>
+					<input type="text" class="form-control" placeholder="Jawa, Batak, Etc.." name="suku" value="<?= !empty($data_profile['suku']) ? $data_profile['suku'] : "" ?>">
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-6 col-12">
+				<div class="form-group">
+					<label for="agama">Agama</label>
+					<select name="agama" id="agama" class="form-control">
+						<option value="">Pilih</option>
+						<option value="islam" <?= !empty($data_profile["agama"]) && "islam" == strtolower($data_profile["agama"]) ? "selected" : ""  ?>>Islam</option>
+						<option value="kristen" <?= !empty($data_profile["agama"]) && "kristen" == strtolower($data_profile["agama"]) ? "selected" : ""  ?>>Kristen</option>
+						<option value="katolik" <?= !empty($data_profile["agama"]) && "katolik" == strtolower($data_profile["agama"]) ? "selected" : ""  ?>>Katolik</option>
+						<option value="hindu" <?= !empty($data_profile["agama"]) && "hindu" == strtolower($data_profile["agama"]) ? "selected" : ""  ?>>Hindu</option>
+						<option value="buddha" <?= !empty($data_profile["agama"]) && "buddha" == strtolower($data_profile["agama"]) ? "selected" : ""  ?>>Buddha</option>
+						<option value="konghucu" <?= !empty($data_profile["agama"]) && "konghucu" == strtolower($data_profile["agama"]) ? "selected" : ""  ?>>Konghucu</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="col-md-3 col-sm-6 col-12">
+				<div class="form-group">
+					<label for="perokok">Perokok</label>
+					<select name="perokok" id="perokok" class="form-control">
+						<option value="0" <?= !empty($data_profile["perokok"]) && "0" == $data_profile["perokok"] ? "selected" : ""  ?>>Tidak</option>
+						<option value="1" <?= !empty($data_profile["perokok"]) && "1" == $data_profile["perokok"] ? "selected" : ""  ?>>Ya</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="col-md-3 col-sm-6 col-12">
+				<div class="form-group">
+					<label for="hobi">Hobi</label>
+					<input type="text" class="form-control" placeholder="Berenang, Memancing, Etc.." name="hobi" value="<?= !empty($data_profile['hobi']) ? $data_profile['hobi'] : "" ?>">
+				</div>
+			</div>
 			<div class="col-md-6 col-12">
 				<div class="form-group">
 					<label for="bio">Bio</label>
